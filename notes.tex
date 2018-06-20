@@ -210,8 +210,11 @@ With the $u(k)$ and $y(k)$ signals used for identification, the estimator model 
  \hat{e}_y(k|e_x,w)= C_LA_L^{k-1}e_x+C_L\mathlarger{\sum}\limits_{t=1}^{k-1}A_L^{t-1}B_Lw+D_Lw
  \end{matrix}
  \end{equation}
-This set can be proven to be \textcolor{red}{positive invariant}, meaning that if $w(k) \in \hat{W}_{\infty}$ is applied to the system when $e_y(k) \in \hat{E}_{\infty}$, it will lead to $e_y(k+1) \in \hat{E}_{\infty}$. \\
-To calculate $\hat{W}_{\infty}$, one can calculate $\hat{e}_y(k)$ for increasing values of $k$ and an \textcolor{red}{arbitrary} initial condition $e_x$, and constraint $\hat{e}_y(k)$ to lie within the estimated output-bound set $\hat{E}_\infty$. This is given by:
+This set can be proven to be \textcolor{red}{positive invariant}, meaning that if $w(k) \in \hat{W}_{\infty}$ is applied to the system when $e_y(k) \in \hat{E}_{\infty}$, it will lead to $e_y(k+1) \in \hat{E}_{\infty}$. For a particular value of future time instant $k$, the set $\hat{W}_{k}$ is defined as:
+\begin{equation}
+\hat{W}_k = \{w: \hat{e}_y(t|e_x,w) \in \hat{E}_{\infty} \hspace{10pt} \forall e_x \in \mathbb{R}^{n_M+n_D}, t \leq k, t \in \mathbb{N} \}
+\end{equation}\\
+To calculate $\hat{W}_{\infty}$, one can calculate $\hat{W}_k$ for increasing values of $k$ and an \textcolor{red}{arbitrary} initial condition $e_x$. Following the \textcolor{red}{finite termination} property, the sets $\hat{W}_{k}$ converge to $\hat{W}_{\infty}$. This is given by:
 \begin{equation}
 \begin{matrix}
 \text{For increasing values of $k$:} &
@@ -223,7 +226,13 @@ G(k)w \leq h-C_LA_L^{k-1}e_x
 \end{matrix}
 \end{matrix}
 \end{equation}
-\textcolor{red}{For a stable estimator design, $A_L$ is stable, and hence $C_LA_L^{k-1}e_x \rightarrow 0$ as $k \rightarrow 0$. Also, the finite termination property of $G(k)$ follows, with}
+\textcolor{red}{For a stable estimator design, $A_L$ is stable, and hence $C_LA_L^{k-1}e_x \rightarrow 0$ as $k \rightarrow 0$. Also, the finite termination property of $G(k)$ follows}.
+
+\section{Reference governor design}
+Since $w(k)$ is the model uncertainty and not noise, the controller should control the signal $y(k)$, which is given by $
+y(k) = \hat{y}(k)+e_y(k)$.
+The complete model generating this output
+
 \bibliographystyle{alpha}
 \bibliography{sample}
 

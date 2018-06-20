@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.1.25)  20 JUN 2018 22:01
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.1.25)  20 JUN 2018 23:04
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1072,7 +1072,7 @@ Package epstopdf Info: Source file: <Figures/id_data.eps>
 ted-to.pdf Figures/id_data.eps>
 (epstopdf)             \includegraphics on input line 60.
 Package epstopdf Info: Output file is already uptodate.
-<Figures/id_data-eps-converted-to.pdf, id=23, 414.54875pt x 294.09875pt>
+<Figures/id_data-eps-converted-to.pdf, id=27, 414.54875pt x 294.09875pt>
 File: Figures/id_data-eps-converted-to.pdf Graphic file (type pdf)
 
 <use Figures/id_data-eps-converted-to.pdf>
@@ -1096,13 +1096,13 @@ Underfull \hbox (badness 10000) in paragraph at lines 83--87
 erted-to.pdf>] [2]
 No file notes.bbl.
 [3]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 230.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 230.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 239.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 239.
  (./notes.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 230.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 230.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 239.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 239.
 Package rerunfilecheck Info: File `notes.out' has not changed.
-(rerunfilecheck)             Checksum: C62F92F1A01CE53A35BFA7409E95497D;197.
+(rerunfilecheck)             Checksum: ADDDAA0C546D0A54DBEF6BE14B40430A;257.
 
 
 LaTeX Font Warning: Size substitutions with differences
@@ -1111,13 +1111,13 @@ LaTeX Font Warning: Size substitutions with differences
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 230.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 239.
  ) 
 Here is how much of TeX's memory you used:
- 19849 strings out of 493029
- 356588 string characters out of 6136234
- 438804 words of memory out of 5000000
- 22911 multiletter control sequences out of 15000+600000
+ 19852 strings out of 493029
+ 356620 string characters out of 6136234
+ 439804 words of memory out of 5000000
+ 22912 multiletter control sequences out of 15000+600000
  80190 words of font info for 163 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  62i,19n,56p,995b,368s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1138,10 +1138,10 @@ ts/type1/public/txfonts/txex.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
 lic/txfonts/txmia.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts
 /txsy.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/boondox/zxxrl8a.pfb>
-Output written on notes.pdf (3 pages, 2534147 bytes).
+Output written on notes.pdf (3 pages, 2535962 bytes).
 PDF statistics:
- 128 PDF objects out of 1000 (max. 8388607)
- 103 compressed objects within 2 object streams
- 16 named destinations out of 1000 (max. 500000)
- 50 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 133 PDF objects out of 1000 (max. 8388607)
+ 108 compressed objects within 2 object streams
+ 18 named destinations out of 1000 (max. 500000)
+ 58 words of extra memory for PDF output out of 10000 (max. 10000000)
 
