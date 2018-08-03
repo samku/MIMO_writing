@@ -1,0 +1,337 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%2345678901234567890123456789012345678901234567890123456789012345678901234567890
+%        1         2         3         4         5         6         7         8
+
+\documentclass[letterpaper, 10 pt, conference]{ieeeconf}  % Comment this line out if you need a4paper
+
+%\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4 paper
+
+\IEEEoverridecommandlockouts                              % This command is only needed if 
+                                                          % you want to use the \thanks command
+
+\overrideIEEEmargins                                      % Needed to meet printer requirements.
+
+%In case you encounter the following error:
+%Error 1010 The PDF file may be corrupt (unable to open PDF file) OR
+%Error 1000 An error occurred while parsing a contents stream. Unable to analyze the PDF file.
+%This is a known problem with pdfLaTeX conversion filter. The file cannot be opened with acrobat reader
+%Please use one of the alternatives below to circumvent this error by uncommenting one or the other
+%\pdfobjcompresslevel=0
+%\pdfminorversion=4
+
+% See the \addtolength command later in the file to balance the column lengths
+% on the last page of the document
+
+% The following packages can be found on http:\\www.ctan.org
+\usepackage{graphics} % for pdf, bitmapped graphics files
+\usepackage{epsfig} % for postscript graphics files
+\usepackage{mathptmx} % assumes new font selection scheme installed
+\usepackage{times} % assumes new font selection scheme installed
+\usepackage{amsmath} % assumes amsmath package installed
+\usepackage{amssymb}  % assumes amsmath package installed
+\usepackage{mathtools}
+\usepackage{relsize}
+\usepackage{tikz}
+\graphicspath{{./Drawings/}} 
+\newcommand{\notimplies}{%
+	\mathrel{{\ooalign{\hidewidth$\not\phantom{=}$\hidewidth\cr$\implies$}}}}
+\usepackage[margin=0.8cm]{caption}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+\pgfplotsset{plot coordinates/math parser=false}
+\newlength\figureheight
+\newlength\figurewidth 
+\usepackage{adjustbox}
+\usepackage{indentfirst}
+
+
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+
+
+\setlength{\parindent}{15pt} % Default is 15pt.
+\newcommand{\AB}[1]{\textbf{\color{magenta}{[AB: #1]}}}
+\newcommand{\SK}[1]{\textbf{\color{blue}{[SK: #1]}}}
+\newcommand{\SKN}[1]{\textbf{\color{red}{#1}}}
+\newcommand{\smallmat}[1]{\left[ \begin{smallmatrix}#1 \end{smallmatrix} \right]}
+
+\title{\LARGE \bf
+Identification of exogenous disturbance signal sets
+}
+
+
+\author{XYZ, A.Bemporad% <-this % stops a space
+\thanks{*This work was not supported by any organization}% <-this % stops a space
+\thanks{Sampath Kumar Mulagaleti and Alberto Bemporad are with
+		the IMT School for Advanced Studies Lucca, Piazza San Francesco 19,
+		55100 Lucca, Italy. 
+		 Email: 
+	   {\tt\small \{s.mulagaleti,alberto.bemporad\}@imtlucca.it}}%%
+}
+
+\bibliographystyle{ieeetr}
+\begin{document}
+
+
+
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+
+This work deals with uncertain linear models of dynamical systems, with the uncertainty modeled as an exogenous disturbance signal acting on the output. A method to identify the set within which this uncertainty lies is presented. 
+
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+An ARX model of a dynamical system is identified, which is parameterized as follows:
+\begin{equation*} 
+A(q^{-1})y(k)=B(q^{-1})u(k)+w(k)
+\end{equation*}
+ For this, the dataset $D_N=\{u(k),y(k);k\in1,2,..,N\}$ obtained from open-loop experiments is utilized. Assuming the model is invertible, it is rewritten as
+ \begin{equation} 
+ y(k)=M(q^{-1})u(k)+D(q^{-1})w(k)
+ \label{tfmodel}
+ \end{equation}
+ where the transfer functions are $M(q^{-1})=B(q^{-1})/A(q^{-1})$ and $D(q^{-1})=1/A(q^{-1})$. Hence, the output $y(k)$ is generated as the sum of two systems, a schematic of which is shown here:
+ \begin{figure}[h]
+ 	\hspace{20pt}
+ 	\includegraphics[scale=0.15]{schematic.jpeg}
+ 	\caption{ARX model}
+ \end{figure} \\
+If the dataset $D_N$ is noise-free, the part $y_D(k)$ of the output $y(k)$ that the model $M(q^{-1})$ does not capture can be attributed to model uncertainty. Hence, the uncertainty is modeled as an exogenous disturbance signal acting on the output. Robust model-based control schemes can utilize this model for controller synthesis, provided the uncertainty set the exogenous disturbance signal $w(k)$ belongs to is available. In the next section, one such control scheme is presented, and a method to obtain the set in which $w(k)$ lies is presented.
+  \section{Robust controller design}
+  For controller synthesis, we first
+  convert the transfer function in Eq.\eqref{tfmodel} to state space form, and obtain the following equations:
+  \begin{equation} 
+  \begin{matrix}
+  \begin{bmatrix}
+  x_M(k+1) \\ x_D(k+1)
+  \end{bmatrix} = 
+  \begin{bmatrix}
+  A_M & 0 \\ 0 & A_D
+  \end{bmatrix}
+  \begin{bmatrix}
+  x_M(k) \\ x_D(k)
+  \end{bmatrix} + 
+  \begin{bmatrix}
+  B_M \\ 0
+  \end{bmatrix}
+  u(k)+ 
+  \begin{bmatrix}
+  0 \\ B_D
+  \end{bmatrix}
+  w(k) \\ \\
+  y(k) = 
+  \begin{bmatrix}
+  C_M & C_D
+  \end{bmatrix}
+  \begin{bmatrix}
+  x_M(k) \\ x_D(k)
+  \end{bmatrix}
+  + D_Mu(k) + D_Dw(k) 
+  \end{matrix}
+  \label{ssmodel}
+  \end{equation}
+  where the states $x_M(k)$ and $x_D(k)$ belong to the system model $M$ and the disturbance model $D$ respectively. 
+  In a condensed way, they are written as:
+  \begin{equation}
+  \begin{matrix}
+    x(k+1)=Ax(k)+B_Uu(k)+B_Ww(k) \\
+    y(k)=Cx(k)+D_Uu(k)+D_Ww(k) 
+    \end{matrix} 
+        \label{ssmodel_condensed}
+    \end{equation}
+ where the output vector $y(k) \in I\!R^{n_y}$.
+  A robust reference governor can be designed to provide a control input $u(k)$ that makes the output $y(k)$ 
+  track a reference signal $r(k)$. At each time step $t$, the controller solves the optimization problem:
+  	\begin{equation}
+  	\small
+  	\begin{aligned}
+  	\underset{\bar{u}}{\text{min}}
+  	&  \hspace{20pt} \mathlarger{\sum\limits_{k=1}^{N_P}}(\hat y(t+k)-r(t+k))^2 \\
+  	\text{subject to}
+  	%\begin{matrix}
+  	& \hspace{20pt} \hat{x}(t+k+1) = A\hat{x}(t+k) + B_U\bar{u}\\
+  	& \hspace{20pt} \hat y(t+k) = C\hat{x}(t+k) + D_U\bar{u} \\
+  	& \hspace{20pt} \hat{x}(t)=x(t) \\
+  	& \hspace{20pt} (x(t),\bar{u}) \in \mathbb{O}_{N_P}
+  	%	& \hspace{20pt} Hy_{\gamma}(t) \leq h \mbox{\AB{I think $Hy_{\gamma}(t)\leq h$ is redundant}}\\
+  	%	& \hspace{20pt}  g(t+k) \in \mathbb{G}_{N_P}(\gamma(t)) \\
+  	%\end{matrix}
+  	\end{aligned}
+  	\label{RMPC}
+  	\end{equation}
+  It reads the initial state $x(t)$ of the system, and calculates a constant control input $\bar{u}$ which is feasible with respect to the output admissible set $\mathbb{O}_{N_P}$ of the system Eq.\eqref{ssmodel} defined as:
+  \begin{equation}
+  \begin{matrix}
+  \mathbb{O}_{N_P} = \{(x(t),\bar{u}):y\in \mathbb{Y}, u(t+k)=\bar{u},\forall w \in \mathbb{W}  \\ \hspace{150pt} \forall k \in \{1,2,..,N_P\} \}
+  \end{matrix}
+  \label{O_form}
+  \end{equation}
+  where $y \in \mathbb{Y}$ denotes the future output sequence $\{y(t+k)\in\mathbb{Y},k=1,..,N_P\}$
+  and $w \in \mathbb{W}$ denotes the future disturbance sequence $\{w(t+k)\in\mathbb{W},k=0,..,N_P\}$.
+  It is the set of initial states $x(t)$ and a constant control input $\bar{u}$ such that the future output trajectory of the system does not violate the constraints defined by $\mathbb{Y}$ for any possible bounded disturbance sequence $w\in\mathbb{W}$, within the horizon time $N_P$. 
+  \\
+  \begin{table*}[t]
+  	\begin{equation}
+  	\mathbb{O}_{N_P}= \begin{Bmatrix}
+  	(x(t),\bar{u}):
+  	\tilde{H}
+  	\begin{pmatrix}
+  	\begin{bmatrix}
+  	CA \\ CA^2 \\ . \\ . \\ CA^{N_P}
+  	\end{bmatrix}x(t) +
+  	\begin{bmatrix}
+  	CB_U+D_U \\ CAB_U+D_U \\ . \\ . \\ C\sum\limits_{j=0}^{N_P-1}A^{j}B_U + D_{U}
+  	\end{bmatrix}\bar{u} + 
+  	\begin{bmatrix}
+  	CB_W & D_W & . & .  & 0 \\ CAB_W & CB_W & D_W & . & 0 \\ . \\ . \\ CA^{N_P-1}B_W & CA^{N_P-2}B_W & . & . & D_W
+  	\end{bmatrix}
+  	\begin{bmatrix}
+  	w(t) \\ w(t+1) \\ . \\ . \\ w(t+N_P)
+  	\end{bmatrix} 
+  	\end{pmatrix}
+  	\leq
+  	\tilde{h}
+  	\end{Bmatrix}
+  	\label{full_ONP}
+  	\end{equation}
+  \end{table*}
+  At any future time instant $t+k$, given the initial state $x(t)$ and a constant control input $\bar{u}$, the output $y(t+k)$ is given by:
+  	\begin{equation}
+  	\hspace{-30pt}
+  	\begin{aligned}
+  	\begin{matrix}
+  	y(t+k) = CA^{k}x(t) + \bigg( C\sum\limits_{j=0}^{k-1}A^{j}B_U + D_{U} \bigg)\bar{u} + \vspace{5pt}\\  \hspace{110pt} C\sum\limits_{j=0}^{k-1}A^jB_Ww(t+k-1-j) + D_{W} w(t+k)
+  	\end{matrix}
+  	\end{aligned}
+  	\label{elongform}
+  	\end{equation}
+  	It is desired to constraint the output $y(t+k)$ at a time instant $t+k$ within the polyhedral set $Hy(t+k) \leq h, h \in I\!R^{n_c}$.
+  The output constraint set $\mathbb{Y}$ represents a collection of these pointwise in time polyhedron constraints, and hence is written as:
+  \begin{equation*}
+  \small
+  \mathbb{Y}=\begin{Bmatrix}y:
+  \begin{bmatrix}
+  H & . & . & 0 \\
+  . & H & . & .\\
+  . & . & . & . \\
+  0 & . & . & H
+  \end{bmatrix}
+  \begin{bmatrix}
+  y(t+1) \\ . \\ . \\ y(t+N_P)
+  \end{bmatrix}
+  \leq \begin{bmatrix}
+  h \\ . \\ . \\  h
+  \end{bmatrix}
+  \end{Bmatrix} = 
+  \{ y: \tilde{H} y \leq \tilde{h} \}
+  \end{equation*}
+  \iffalse
+  Defining the set $\mathbb{O}_k=\{(x(t),\bar{u}):Hy(t+k)\leq h\ \forall w \in \mathbb{W}\}$, the desired set $\mathbb{O}_{N_P}$ can be written as:
+  \begin{equation*}
+  \mathbb{O}_{N_P}=\bigcap^{N_P}_{k=1} \mathbb{O}_k
+  \end{equation*}
+  \fi
+  Hence, the definition of set $\mathbb{O}_{N_P}$ in Eq.\eqref{O_form} can be rewritten as:
+   \begin{equation}
+   \begin{matrix}
+   \mathbb{O}_{N_P} = \{(x(t),\bar{u}):\tilde{H}y\leq \tilde{h},  u(t+k)=\bar{u},\forall w \in \mathbb{W}  \\ \hspace{150pt} \forall k \in \{1,2,..,N_P\} \}
+   \end{matrix}
+   \label{O_form}
+   \end{equation}
+Using the form in  Eq.\eqref{elongform}, the constraints can be enumerated as shown in Eq.\eqref{full_ONP}. It is written in a simplified notation as:
+  \begin{equation}
+  \small
+  \mathbb{O}_{N_P}= \begin{Bmatrix}
+  (x(t),\bar{u}):
+  \tilde{H}
+  \begin{pmatrix}
+	H_xx(t) +
+  H_u\bar{u} +  
+  \begin{bmatrix}
+  H^1_w \\ . \\ . \\ H^{n_yN_P}_w
+  \end{bmatrix}
+  w
+  \end{pmatrix}
+  \leq
+  \begin{bmatrix}
+  h_Y^1 \\ . \\ . \\ h_Y^{n_cN_P}
+  \end{bmatrix}
+  \end{Bmatrix}
+  \end{equation}
+  where row $i$ of the matrix associated to the future disturbance sequence $w$ is denoted as $H^i_w$, and element $i$ of the vector $\tilde{h}$ is denoted by $h_Y^i$.
+  Since the output feasibility should hold over all possible future disturbance sequences, we desire to calculate the set
+  \begin{equation}
+   (x(t),\bar{u}) \in \mathbb{Y} \sim D\mathbb{W} \sim .. \sim CA^{t+N_P-1}B\mathbb{W} 
+  \end{equation}
+  We do this by performing a P-subtraction, resulting in the set:
+  \begin{equation}
+  \begin{matrix}
+  \mathbb{O}_{N_P} = \{ (x(t),\bar{u}):\tilde{H}(H_xx(t)+H_u\bar{u})\leq h_{YW} \} \vspace{5pt} \\ 
+  h_{YW}^i = h_Y^i-\underset{w\in \mathbb{W}}{\text{sup}} H_w^i \vec{w}
+  \end{matrix}
+  \label{overall}
+  \end{equation}
+  where $h_{YW}^i$ is the element $i$ of the vector $h_{YW}$.
+  \\
+  To calculate this input feasible set, we need the disturbance sequence set $\mathbb{W}$. The calculation of this set is discussed in the next section.
+  \section{Calculation of $\vec{\mathbb{W}}$}
+  \noindent
+  Since the model uncertainty is captured as an exogenous disturbance signal, and the measurement data in $D_N$ is noise-free, the set in which this exogenous disturbance signal lies can be extracted from $D_N$. To this end, we first write 
+  the disturbance model separately as:
+  \begin{equation}
+  \begin{matrix}
+  x_D(k+1) = A_Dx_D(k)+B_Dw(k)  \\
+  y_D(k) = C_Dx_D(k)+D_Dw(k)
+  \end{matrix}
+  \label{ssD}
+  \end{equation}
+  and the system model as:
+  \begin{equation}
+  \begin{matrix}
+  x_M(k+1) = A_Mx_M(k)+B_Mu(k)  \\
+  y_M(k) = C_Mx_M(k)+D_Mu(k)
+  \end{matrix}
+  \label{ssM}
+  \end{equation}
+	The system model Eq.\eqref{ssM} is simulated with input signal $u(k)$ obtained from dataset $D_N$, {\color{red}{with the initial condition $x_M(0)=0$}}.
+	The output of this simulation is $y_M(k)$. The output of the exogenous disturbance block $y_D(k)$ is hence calculated as $y(k)-y_M(k)$, which at each time instant $k$ is indicated as lying in a polyhedral set
+	\begin{equation}
+	y_D(k) \in \mathbb{Y}^D_N = \{y_D:H_Dy_D \leq h_D\}
+	\end{equation}
+	In the limit of infinite data $D_N$, the set $\mathbb{Y}_N^D$ approaches the actual exogenous disturbance output set $\mathbb{Y}_{\infty}^D$. Using this set, which is the output constraint set of the system described by Eq.\eqref{ssD}, we calculate $\vec{\mathbb{W}}(x_D(t))$ at each time instant $t$. It is the set in which the sequence of disturbance inputs $\{w(t+k):k=0:N_P\}$ should lie in, such that the output constraint $\{y_D(t+k)\in \mathbb{Y}_{\infty}^D:k=0:N_P\}$ of the disturbance model are respected. \\
+	To calculate $\vec{\mathbb{W}}(x_D(t))$, we write the predicted output $y_D(t+k)$ of the disturbance model given the initial state $x_D(t)$ as:
+	\begin{equation}
+	\small
+	\begin{matrix}
+	y_D(t)=C_Dx_D(t)+D_Dw(t) \text{ if } k=0 \vspace{5pt} \\
+	y_D(t+k)=C_DA_D^{k}x_D(t)+ C_D\sum\limits_{j=0}^{k-1}A_D^jB_Dw(t+k-1-j)+D_Dw(t+k) \\ \hspace{150pt}\text{ if } k>0
+	\end{matrix}
+	\end{equation}
+    Collecting the disturbance input sequences  $\{w(t+k):k=1:N_P\}$ in a vector $\vec{w}$, the set $\vec{\mathbb{W}}(x_D(t))$ can be written as:
+    \begin{equation}
+    \tiny
+    \vec{\mathbb{W}}(x_D(t))=\begin{Bmatrix}\vec{w}:H_D\begin{pmatrix}\begin{bmatrix}C_D \\ C_DA_D\\ . \\ . \\ C_DA_D^{N_P}\end{bmatrix}x_D(t) + \begin{bmatrix}
+    D_D & 0 & . & . & 0 \\
+    C_DB_D & D_D & . & . & 0 \\
+    C_DA_DB_D & C_DB_D & D_D & . & 0 \\
+    . &  &  &  & . \\
+    C_DA_D^{N_P-1} & . & . & . & D_D
+    \end{bmatrix}\bar{w}\end{pmatrix} \leq \begin{bmatrix} h_D \\ h_D \\ . \\ . \\ h_D \end{bmatrix} 
+    \end{Bmatrix}
+    \end{equation}      
+    Hence, at each time step $t$, the state of the disturbance model $x_D(t)$ can be read, and the corresponding disturbance input set $\vec{\mathbb{W}}(x_D(t))$ can be calculated. Following this, the linear programs in  Eq.\eqref{overall}, which are rewritten as follows are solved:
+    \begin{equation}
+    h_{YW}^i = h_Y^i-\underset{\vec{w}\in \vec{\mathbb{W}}(x_D(t))}{\text{sup}} H_w^i \vec{w}  
+    \end{equation}     
+    Hence, the output admissible set $\mathbb{O}_{N_P}$ is obtained, which is used in the controller solving the optimization problem described in Eq.\eqref{RMPC} to calculate a robust optimal control input $\bar{u}$.
+%\bibliography{references}
+\end{document}
