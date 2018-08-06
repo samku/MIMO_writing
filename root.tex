@@ -45,6 +45,16 @@
 \usepackage{adjustbox}
 \usepackage{indentfirst}
 
+\newcommand*{\CC}{%
+	\textsf{C\kern-1ex C}%
+}
+\newcommand*{\RR}{%
+	\textsf{I\kern-.3ex R}%
+}
+\newcommand*{\ZZ}{%
+	\textsf{Z\kern-1ex Z}%
+}
+
 
 \newtheorem{lemma}{Lemma}
 \newtheorem{theorem}{Theorem}
@@ -90,67 +100,98 @@ This work deals with uncertain linear models of dynamical systems, with the unce
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
-An ARX model of a dynamical system is identified, which is parameterized as follows:
+Model predictive control schemes can be used to design controllers for systems with constraints. The schemes choose a control input by making predictions of the future evolution of the system. They use a model of the system being controlled to make these predictions. Very often, the model does not represent the system exactly, resulting in the predictions not being accurate. This can result in the system constraints being violated. To avoid this, robust model predictive control schemes have been proposed in literature. A review of the considerations to be made while developing such robust schemes can be found in \cite{10.1007/BFb0109870}. In the current work, we deal with uncertainty descriptions.  
+ \\ \indent
+ Uncertainty descriptions are explicit characterizations of the uncertainty present within the model. Such a characterization helps in establishing bounds on the predictions made by the model, such that the real performance of the system lies within these bounds. The robust model predictive controller scheme should ensure constraint satisfaction for all possible predictions of the system evolution within these bounds.  
+ 
+\section{Problem Statement}
+We consider a \textit{multi-input multi-output} plant, generating an output signal $y(t) \in  \RR^{n_y}$ corresponding to the input signal $y(t) \in\RR^{n_u}, t \in \ZZ^+$. We aim at synthesizing a controller that can make the output track a user-defined reference signal $r(t) \in  \RR^{n_y}$, while robustly respecting the polyhedral constraints $Hy(t) \leq h , t \in \ZZ^+$. Towards this end, we first perform an experiment to identify a model of the plant, the details of which are given in the next section. 
+\section{Open-loop model identification}
+An ARX model of a open-loop dynamical system is identified, which is parameterized as follows:
 \begin{equation*} 
-A(q^{-1})y(k)=B(q^{-1})u(k)+w(k)
+A(q^{-1})y(t)=B(q^{-1})u(t)+w(t)
 \end{equation*}
- For this, the dataset $D_N=\{u(k),y(k);k\in1,2,..,N\}$ obtained from open-loop experiments is utilized. Assuming the model is invertible, it is rewritten as
- \begin{equation} 
- y(k)=M(q^{-1})u(k)+D(q^{-1})w(k)
- \label{tfmodel}
- \end{equation}
- where the transfer functions are $M(q^{-1})=B(q^{-1})/A(q^{-1})$ and $D(q^{-1})=1/A(q^{-1})$. Hence, the output $y(k)$ is generated as the sum of two systems, a schematic of which is shown here:
- \begin{figure}[h]
- 	\hspace{20pt}
- 	\includegraphics[scale=0.15]{schematic.jpeg}
- 	\caption{ARX model}
- \end{figure} \\
-If the dataset $D_N$ is noise-free, the part $y_D(k)$ of the output $y(k)$ that the model $M(q^{-1})$ does not capture can be attributed to model uncertainty. Hence, the uncertainty is modeled as an exogenous disturbance signal acting on the output. Robust model-based control schemes can utilize this model for controller synthesis, provided the uncertainty set the exogenous disturbance signal $w(k)$ belongs to is available. In the next section, one such control scheme is presented, and a method to obtain the set in which $w(k)$ lies is presented.
+For this, the dataset $D_N=\{u(k),y(k);k\in1,2,..,N\}$ obtained from open-loop experiments is utilized. Assuming the model is invertible, it is rewritten as
+\begin{equation} 
+y(t)=M(q^{-1})u(t)+D(q^{-1})w(t)
+\label{tfmodel}
+\end{equation}
+where the transfer functions are $M(q^{-1})=B(q^{-1})/A(q^{-1})$ and $D(q^{-1})=1/A(q^{-1})$. Hence, the output $y(t)$ is the sum of outputs of two systems, a schematic of which is shown here:
+\begin{figure}[h]
+	\hspace{20pt}
+	\includegraphics[scale=0.15]{schematic.jpeg}
+	\caption{ARX model}
+\end{figure} \\
+If the dataset $D_N$ is noise-free, the part $y_D(t)$ of the output $y(t)$ that the model $M(q^{-1})$ does not capture can be attributed to model uncertainty. Hence, the uncertainty is modeled as an exogenous disturbance signal acting on the output. Robust model-based control schemes can utilize this model for controller synthesis, provided the uncertainty set the exogenous disturbance signal $w(t)$ belongs to is available. In the next section, one such control scheme is discussed. Following that, a method to obtain the set in which $w(t)$ lies is presented.
   \section{Robust controller design}
   For controller synthesis, we first
   convert the transfer function in Eq.\eqref{tfmodel} to state space form, and obtain the following equations:
   \begin{equation} 
   \begin{matrix}
   \begin{bmatrix}
-  x_M(k+1) \\ x_D(k+1)
+  x_M(t+1) \\ x_D(t+1)
   \end{bmatrix} = 
   \begin{bmatrix}
   A_M & 0 \\ 0 & A_D
   \end{bmatrix}
   \begin{bmatrix}
-  x_M(k) \\ x_D(k)
+  x_M(t) \\ x_D(t)
   \end{bmatrix} + 
   \begin{bmatrix}
   B_M \\ 0
   \end{bmatrix}
-  u(k)+ 
+  u(t)+ 
   \begin{bmatrix}
   0 \\ B_D
   \end{bmatrix}
-  w(k) \\ \\
-  y(k) = 
+  w(t) \\ \\
+  y(t) = 
   \begin{bmatrix}
   C_M & C_D
   \end{bmatrix}
   \begin{bmatrix}
-  x_M(k) \\ x_D(k)
+  x_M(t) \\ x_D(t)
   \end{bmatrix}
-  + D_Mu(k) + D_Dw(k) 
+  + D_Mu(t) + D_Dw(t) 
   \end{matrix}
   \label{ssmodel}
   \end{equation}
-  where the states $x_M(k)$ and $x_D(k)$ belong to the system model $M$ and the disturbance model $D$ respectively. 
+  where the states $x_M(t)$ and $x_D(t)$ belong to the system model $M$ and the disturbance model $D$ respectively. 
   In a condensed way, they are written as:
   \begin{equation}
   \begin{matrix}
-    x(k+1)=Ax(k)+B_Uu(k)+B_Ww(k) \\
-    y(k)=Cx(k)+D_Uu(k)+D_Ww(k) 
+    x(t+1)=Ax(t)+B_Uu(t)+B_Ww(t) \\
+    y(t)=Cx(t)+D_Uu(t)+D_Ww(t) 
     \end{matrix} 
         \label{ssmodel_condensed}
     \end{equation}
- where the output vector $y(k) \in I\!R^{n_y}$.
-  A robust reference governor can be designed to provide a control input $u(k)$ that makes the output $y(k)$ 
-  track a reference signal $r(k)$. At each time step $t$, the controller solves the optimization problem:
+    \begin{table*}[t]
+    	\begin{equation}
+    	\mathbb{O}_{N_P}= \begin{Bmatrix}
+    	(x(t),\bar{u}):
+    	\tilde{H}
+    	\begin{pmatrix}
+    	\begin{bmatrix}
+    	CA \\ CA^2 \\ . \\ . \\ CA^{N_P}
+    	\end{bmatrix}x(t) +
+    	\begin{bmatrix}
+    	CB_U+D_U \\ CAB_U+D_U \\ . \\ . \\ C\sum\limits_{j=0}^{N_P-1}A^{j}B_U + D_{U}
+    	\end{bmatrix}\bar{u} + 
+    	\begin{bmatrix}
+    	CB_W & D_W & . & .  & 0 \\ CAB_W & CB_W & D_W & . & 0 \\ . \\ . \\ CA^{N_P-1}B_W & CA^{N_P-2}B_W & . & . & D_W
+    	\end{bmatrix}
+    	\begin{bmatrix}
+    	w(t) \\ w(t+1) \\ . \\ . \\ w(t+N_P)
+    	\end{bmatrix} 
+    	\end{pmatrix}
+    	\leq
+    	\tilde{h}
+    	\end{Bmatrix}
+    	\label{full_ONP}
+    	\end{equation}
+    \end{table*}
+  A robust reference governor can be designed to provide a control input $u(t)$ that makes the output $y(t)$ 
+  track a reference signal $r(t)$. At each time step $t$, the controller solves the optimization problem:
   	\begin{equation}
   	\small
   	\begin{aligned}
@@ -179,31 +220,6 @@ If the dataset $D_N$ is noise-free, the part $y_D(k)$ of the output $y(k)$ that 
   and $w \in \mathbb{W}$ denotes the future disturbance sequence $\{w(t+k)\in\mathbb{W},k=0,..,N_P\}$.
   It is the set of initial states $x(t)$ and a constant control input $\bar{u}$ such that the future output trajectory of the system does not violate the constraints defined by $\mathbb{Y}$ for any possible bounded disturbance sequence $w\in\mathbb{W}$, within the horizon time $N_P$. 
   \\
-  \begin{table*}[t]
-  	\begin{equation}
-  	\mathbb{O}_{N_P}= \begin{Bmatrix}
-  	(x(t),\bar{u}):
-  	\tilde{H}
-  	\begin{pmatrix}
-  	\begin{bmatrix}
-  	CA \\ CA^2 \\ . \\ . \\ CA^{N_P}
-  	\end{bmatrix}x(t) +
-  	\begin{bmatrix}
-  	CB_U+D_U \\ CAB_U+D_U \\ . \\ . \\ C\sum\limits_{j=0}^{N_P-1}A^{j}B_U + D_{U}
-  	\end{bmatrix}\bar{u} + 
-  	\begin{bmatrix}
-  	CB_W & D_W & . & .  & 0 \\ CAB_W & CB_W & D_W & . & 0 \\ . \\ . \\ CA^{N_P-1}B_W & CA^{N_P-2}B_W & . & . & D_W
-  	\end{bmatrix}
-  	\begin{bmatrix}
-  	w(t) \\ w(t+1) \\ . \\ . \\ w(t+N_P)
-  	\end{bmatrix} 
-  	\end{pmatrix}
-  	\leq
-  	\tilde{h}
-  	\end{Bmatrix}
-  	\label{full_ONP}
-  	\end{equation}
-  \end{table*}
   At any future time instant $t+k$, given the initial state $x(t)$ and a constant control input $\bar{u}$, the output $y(t+k)$ is given by:
   	\begin{equation}
   	\hspace{-30pt}
@@ -215,7 +231,7 @@ If the dataset $D_N$ is noise-free, the part $y_D(k)$ of the output $y(k)$ that 
   	\label{elongform}
   	\end{equation}
   	It is desired to constraint the output $y(t+k)$ at a time instant $t+k$ within the polyhedral set $Hy(t+k) \leq h, h \in I\!R^{n_c}$.
-  The output constraint set $\mathbb{Y}$ represents a collection of these pointwise in time polyhedron constraints, and hence is written as:
+  The output constraint set $\mathbb{Y}$ represents a collection of these pointwise in time polyhedron constraints, and is written as:
   \begin{equation*}
   \small
   \mathbb{Y}=\begin{Bmatrix}y:
@@ -270,9 +286,10 @@ Using the form in  Eq.\eqref{elongform}, the constraints can be enumerated as sh
   where row $i$ of the matrix associated to the future disturbance sequence $w$ is denoted as $H^i_w$, and element $i$ of the vector $\tilde{h}$ is denoted by $h_Y^i$.
   Since the output feasibility should hold over all possible future disturbance sequences, we desire to calculate the set
   \begin{equation}
-   (x(t),\bar{u}) \in \mathbb{Y} \sim D\mathbb{W} \sim .. \sim CA^{t+N_P-1}B\mathbb{W} 
+   \mathbb{O}_{N_P}=\{(x(t),\bar{u}): 	H_xx(t) +
+   H_u\bar{u}\in \mathbb{Y} \sim D\mathbb{W} \sim .. \sim CA^{t+N_P-1}B\mathbb{W}  \}
   \end{equation}
-  We do this by performing a P-subtraction, resulting in the set:
+  where $\sim$ denotes P-subtraction of sets. For polyhedral sets like in our case, performing these operations result in the set:
   \begin{equation}
   \begin{matrix}
   \mathbb{O}_{N_P} = \{ (x(t),\bar{u}):\tilde{H}(H_xx(t)+H_u\bar{u})\leq h_{YW} \} \vspace{5pt} \\ 
@@ -283,17 +300,21 @@ Using the form in  Eq.\eqref{elongform}, the constraints can be enumerated as sh
   where $h_{YW}^i$ is the element $i$ of the vector $h_{YW}$.
   \\
   To calculate this input feasible set, we need the disturbance sequence set $\mathbb{W}$. The calculation of this set is discussed in the next section.
-  \section{Calculation of $\vec{\mathbb{W}}$}
+  \section{Calculation of $\mathbb{W}$}
   \noindent
-  Since the model uncertainty is captured as an exogenous disturbance signal, and the measurement data in $D_N$ is noise-free, the set in which this exogenous disturbance signal lies can be extracted from $D_N$. To this end, we first write 
-  the disturbance model separately as:
+  As discussed earlier, the part $y_D(t)$ of the output $y(t)$ represents uncertainty modeled as an exogenous disturbance input. The signal $y_D(t)$ is generated by the model $D(q^{-1})$, whose state-space equations are written as 
   \begin{equation}
   \begin{matrix}
-  x_D(k+1) = A_Dx_D(k)+B_Dw(k)  \\
-  y_D(k) = C_Dx_D(k)+D_Dw(k)
+  x_D(t+1) = A_Dx_D(t)+B_Dw(t)  \\
+  y_D(t) = C_Dx_D(t)+D_Dw(t)
   \end{matrix}
   \label{ssD}
   \end{equation}
+  A sample data set $U_N$ of $y_D(t)$ can be obtained from $D_N$, by simulating the model $M(q^{-1})$ with the input signals $u(k)$, as:
+  \begin{equation}
+  U_N=\{y_D(k)=y(k)-M(q^{-1})u(k);k \in 1,2,..,N\}
+  \end{equation}
+  \iffalse
   and the system model as:
   \begin{equation}
   \begin{matrix}
@@ -302,8 +323,32 @@ Using the form in  Eq.\eqref{elongform}, the constraints can be enumerated as sh
   \end{matrix}
   \label{ssM}
   \end{equation}
-	The system model Eq.\eqref{ssM} is simulated with input signal $u(k)$ obtained from dataset $D_N$, {\color{red}{with the initial condition $x_M(0)=0$}}.
-	The output of this simulation is $y_M(k)$. The output of the exogenous disturbance block $y_D(k)$ is hence calculated as $y(k)-y_M(k)$, which at each time instant $k$ is indicated as lying in a polyhedral set
+  \fi
+ {\color{red}{with the initial condition $x_M(0)=0$}}.
+ \\
+ {\color{blue}{Ideas: Say first N data points are collected. An outer bounding polyhedral set $\mathbb{Y}^D_N$ is calculated, that encompasses all the points in $U_N$. Now, every point in $U_N$ lies in this set. As the number of data points increase, we will obtain for sure $\mathbb{Y}^D_{N+1} \subseteq \mathbb{Y}^D_N$. Assuming we have infinite data, we have the largest set $\mathbb{Y}^D_{\infty}$ in which every possible $y_D(t)$ will lie. Let $\mathbb{Y}_{\infty}^D$ be a polyhedron $H_Dy_D(t) \leq h_D$. Then, starting at a timestep $t$, if we define $y_D \in \mathbb{Y}_D$ as the sequence $\{y_D(t+k)\in\mathbb{Y}_D,k=1,..,N_P\}$, we can write the set $\mathbb{Y}_D$ as:
+ 		  \begin{equation*}
+ 		  \small
+ 		  \mathbb{Y}_D=\begin{Bmatrix}y:
+ 		  \begin{bmatrix}
+ 		  H_D & . & . & 0 \\
+ 		  . & H_D & . & .\\
+ 		  . & . & . & . \\
+ 		  0 & . & . & H_D
+ 		  \end{bmatrix}
+ 		  \begin{bmatrix}
+ 		  y_D(t+1) \\ . \\ . \\ y_D(t+N_P)
+ 		  \end{bmatrix}
+ 		  \leq \begin{bmatrix}
+ 		  h_D \\ . \\ . \\  h_D
+ 		  \end{bmatrix}
+ 		  \end{Bmatrix} = 
+ 		  \{ y_D: \tilde{H}_D y \leq \tilde{h}_D \}
+ 		  \end{equation*} 
+ 		  \\
+	From this, we can expand in the same way by leaving the w sequence as it is. This will lead to a very similar set of equations. 
+ 		  }}
+	which at each time instant $k$ is indicated as lying in a polyhedral set
 	\begin{equation}
 	y_D(k) \in \mathbb{Y}^D_N = \{y_D:H_Dy_D \leq h_D\}
 	\end{equation}
@@ -333,5 +378,7 @@ Using the form in  Eq.\eqref{elongform}, the constraints can be enumerated as sh
     h_{YW}^i = h_Y^i-\underset{\vec{w}\in \vec{\mathbb{W}}(x_D(t))}{\text{sup}} H_w^i \vec{w}  
     \end{equation}     
     Hence, the output admissible set $\mathbb{O}_{N_P}$ is obtained, which is used in the controller solving the optimization problem described in Eq.\eqref{RMPC} to calculate a robust optimal control input $\bar{u}$.
-%\bibliography{references}
+    
+\bibliography{references}
+
 \end{document}

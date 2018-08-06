@@ -1,3 +1,9 @@
-\begin{thebibliography}{}
+ \newcommand{\noop}[1]{}
+\begin{thebibliography}{1}
+
+\bibitem{10.1007/BFb0109870}
+A.~Bemporad and M.~Morari, ``Robust model predictive control: A survey,'' in
+  {\em Robustness in identification and control} (A.~Garulli and A.~Tesi,
+  eds.), (London), pp.~207--226, Springer London, 1999.
 
 \end{thebibliography}
