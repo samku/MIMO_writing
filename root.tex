@@ -329,7 +329,7 @@ Using the form in  Eq.\eqref{elongform}, the constraints can be enumerated as sh
  {\color{blue}{Ideas: Say first N data points are collected. An outer bounding polyhedral set $\mathbb{Y}^D_N$ is calculated, that encompasses all the points in $U_N$. Now, every point in $U_N$ lies in this set. As the number of data points increase, we will obtain for sure $\mathbb{Y}^D_{N+1} \subseteq \mathbb{Y}^D_N$. Assuming we have infinite data, we have the largest set $\mathbb{Y}^D_{\infty}$ in which every possible $y_D(t)$ will lie. Let $\mathbb{Y}_{\infty}^D$ be a polyhedron $H_Dy_D(t) \leq h_D$. Then, starting at a timestep $t$, if we define $y_D \in \mathbb{Y}_D$ as the sequence $\{y_D(t+k)\in\mathbb{Y}_D,k=1,..,N_P\}$, we can write the set $\mathbb{Y}_D$ as:
  		  \begin{equation*}
  		  \small
- 		  \mathbb{Y}_D=\begin{Bmatrix}y:
+ 		  \mathbb{Y}_D=\begin{Bmatrix}y_D:
  		  \begin{bmatrix}
  		  H_D & . & . & 0 \\
  		  . & H_D & . & .\\
@@ -363,7 +363,7 @@ Using the form in  Eq.\eqref{elongform}, the constraints can be enumerated as sh
 	\end{equation}
     Collecting the disturbance input sequences  $\{w(t+k):k=1:N_P\}$ in a vector $\vec{w}$, the set $\vec{\mathbb{W}}(x_D(t))$ can be written as:
     \begin{equation}
-    \tiny
+\small
     \vec{\mathbb{W}}(x_D(t))=\begin{Bmatrix}\vec{w}:H_D\begin{pmatrix}\begin{bmatrix}C_D \\ C_DA_D\\ . \\ . \\ C_DA_D^{N_P}\end{bmatrix}x_D(t) + \begin{bmatrix}
     D_D & 0 & . & . & 0 \\
     C_DB_D & D_D & . & . & 0 \\
@@ -378,6 +378,12 @@ Using the form in  Eq.\eqref{elongform}, the constraints can be enumerated as sh
     h_{YW}^i = h_Y^i-\underset{\vec{w}\in \vec{\mathbb{W}}(x_D(t))}{\text{sup}} H_w^i \vec{w}  
     \end{equation}     
     Hence, the output admissible set $\mathbb{O}_{N_P}$ is obtained, which is used in the controller solving the optimization problem described in Eq.\eqref{RMPC} to calculate a robust optimal control input $\bar{u}$.
+    \\
+    {\color{blue} Following this, write it in an algorithmic form, and write conditions for which the set $\mathbb{O}_{N_P}$ will be non-empty. (Something about the size of $\mathbb{W}$ set . )
+}
+\section{Using the projected set}
+Instead of solving so many LPs before a QP, we can project the set $\mathbb{W}$. For this, we need the set within which the state of the disturbance block can lie. This is possible to be obtained if we use a non-minimum realization as the state space model. When we have that, we can project within that subset and get a much more conservative thing. 
+Have to write a theorem that projection is a good idea : The obtained set is larger than the original. Assumption that origin lies with W or something, so that it is feasible. Proof by doing minkowski difference : Sup over a larger feasible set leads to a larger number : But that should not break the feasibility of MPC.
     
 \bibliography{references}
 
