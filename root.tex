@@ -58,6 +58,8 @@
 
 \newtheorem{lemma}{Lemma}
 \newtheorem{theorem}{Theorem}
+\newtheorem{assumption}{Assumption}
+\usepackage{lineno,amssymb,subcaption,algpseudocode,algorithm}
 
 
 \setlength{\parindent}{15pt} % Default is 15pt.
@@ -264,36 +266,65 @@ If the dataset $D_N$ is noise-free, the part $y_D(t)$ of the output $y(t)$ that 
    \label{O_form}
    \end{equation}
 Using the form in  Eq.\eqref{elongform}, the constraints can be enumerated as shown in Eq.\eqref{full_ONP}. It is written in a simplified notation as:
+\begin{equation}
+\mathbb{O}_{N_P}= \begin{Bmatrix}
+(x(t),\bar{u}):
+\tilde{H}
+\begin{pmatrix}
+H_xx(t) +
+H_u\bar{u} +  
+H_w
+w
+\end{pmatrix}
+\leq
+\tilde{h}
+\end{Bmatrix}
+\label{O_set}
+\end{equation}
+Since the output feasibility should hold over all possible future disturbance sequences, we desire to calculate the set
+\begin{equation}
+\small
+\mathbb{O}_{N_P}=\{(x(t),\bar{u}): 	H_xx(t) +
+H_u\bar{u}\in \mathbb{Y} \sim D\mathbb{W} \sim .. \sim CA^{t+N_P-1}B\mathbb{W}  \}
+\end{equation}
+where $\sim$ denotes P-subtraction of sets. Towards this end, we first rewrite \eqref{O_set} as: 
   \begin{equation}
   \small
+  \begin{matrix}
+  \hspace{-25pt}
   \mathbb{O}_{N_P}= \begin{Bmatrix}
   (x(t),\bar{u}):
-  \tilde{H}
-  \begin{pmatrix}
-	H_xx(t) +
-  H_u\bar{u} +  
+  G_x(t) +
+  G_u\bar{u} +  
+  G_w
+  w
+  \leq
+  \tilde{h}
+  \end{Bmatrix}
+  \\
+  \hspace{20pt}
+ = \begin{Bmatrix}
+  (x(t),\bar{u}):
+	G_x(t) +
+  G_u\bar{u} +  
   \begin{bmatrix}
-  H^1_w \\ . \\ . \\ H^{n_yN_P}_w
+  G^1_w \\ . \\ . \\ G^{n_cN_P}_w
   \end{bmatrix}
   w
-  \end{pmatrix}
   \leq
   \begin{bmatrix}
   h_Y^1 \\ . \\ . \\ h_Y^{n_cN_P}
   \end{bmatrix}
   \end{Bmatrix}
+  \end{matrix}
   \end{equation}
-  where row $i$ of the matrix associated to the future disturbance sequence $w$ is denoted as $H^i_w$, and element $i$ of the vector $\tilde{h}$ is denoted by $h_Y^i$.
-  Since the output feasibility should hold over all possible future disturbance sequences, we desire to calculate the set
-  \begin{equation}
-   \mathbb{O}_{N_P}=\{(x(t),\bar{u}): 	H_xx(t) +
-   H_u\bar{u}\in \mathbb{Y} \sim D\mathbb{W} \sim .. \sim CA^{t+N_P-1}B\mathbb{W}  \}
-  \end{equation}
-  where $\sim$ denotes P-subtraction of sets. For polyhedral sets like in our case, performing these operations result in the set:
+  where $G_x=\tilde{H}H_x$, $G_u=\tilde{H}H_u$ and $G_w=\tilde{H}H_w$.
+  Row $i$ of the matrix associated to the future disturbance sequence $w$ is denoted as $G^i_w$, and element $i$ of the vector $\tilde{h}$ is denoted by $h_Y^i$.
+   For polyhedral sets like in our case, performing P-subtractions results in the set:
   \begin{equation}
   \begin{matrix}
-  \mathbb{O}_{N_P} = \{ (x(t),\bar{u}):\tilde{H}(H_xx(t)+H_u\bar{u})\leq h_{YW} \} \vspace{5pt} \\ 
-  h_{YW}^i = h_Y^i-\underset{w\in \mathbb{W}}{\text{sup}} H_w^i \vec{w}
+  \mathbb{O}_{N_P} = \{ (x(t),\bar{u}):G_xx(t)+G_u\bar{u})\leq h_{YW} \} \vspace{5pt} \\ 
+  h_{YW}^i = h_Y^i-\underset{w\in \mathbb{W}}{\text{sup}} G_w^i \vec{w}
   \end{matrix}
   \label{overall}
   \end{equation}
@@ -326,7 +357,105 @@ Using the form in  Eq.\eqref{elongform}, the constraints can be enumerated as sh
   \fi
  {\color{red}{with the initial condition $x_M(0)=0$}}.
  \\
- {\color{blue}{Ideas: Say first N data points are collected. An outer bounding polyhedral set $\mathbb{Y}^D_N$ is calculated, that encompasses all the points in $U_N$. Now, every point in $U_N$ lies in this set. As the number of data points increase, we will obtain for sure $\mathbb{Y}^D_{N+1} \subseteq \mathbb{Y}^D_N$. Assuming we have infinite data, we have the largest set $\mathbb{Y}^D_{\infty}$ in which every possible $y_D(t)$ will lie. Let $\mathbb{Y}_{\infty}^D$ be a polyhedron $H_Dy_D(t) \leq h_D$. Then, starting at a timestep $t$, if we define $y_D \in \mathbb{Y}_D$ as the sequence $\{y_D(t+k)\in\mathbb{Y}_D,k=1,..,N_P\}$, we can write the set $\mathbb{Y}_D$ as:
+  \begin{equation}
+  \begin{matrix}
+  x(t+1)=Ax(t)+B_Uu(t)+B_Ww(t) \\
+  y(t)=Cx(t)+D_Uu(t)+D_Ww(t) 
+  \end{matrix} 
+  \label{ssmodel_condensed}
+  \end{equation}
+  \begin{table*}[t]
+   \begin{equation}
+   \small
+   \mathbb{O}_N^D=\begin{Bmatrix}(x_D(t),w):\tilde{H}_D\begin{pmatrix}\begin{bmatrix} C_DA_D\\ C_DA_D^2 \\ . \\ . \\ C_DA_D^{N_P}\end{bmatrix}x_D(t) + \begin{bmatrix}
+   C_DB_D & D_D & . & . & 0 \\
+   C_DA_DB_D & C_DB_D & D_D & . & 0 \\
+   . &  &  &  & . \\
+   . &  &  &  & . \\
+   C_DA_D^{N_P-1} & . & . & . & D_D
+   \end{bmatrix}w\end{pmatrix} \leq \tilde{h}_D
+   \end{Bmatrix}
+   \label{OND_set}
+   \end{equation} 
+  \end{table*}
+ After collecting N data points of $y_D(k)$, an outer bounding polyhedral set $\mathbb{Y}_D^N$ is constructed that encompasses the whole dataset $U_N$. As the number of data points in the experiment increase, we obtain $\mathbb{Y}_D^{N} \subseteq \mathbb{Y}_D^{N+1}$ since $\mathbb{Y}_D^{N+1} =  \mathbb{Y}_D^{N} \cup \{y_D(N+1)\}$.  
+ \begin{assumption}
+ 	 In the limit of infinite data used to build $U_N$, the outer encompassing sets $\mathbb{Y}_D^{N}$ converge to a steady set $\mathbb{Y}_D^{\infty}$.
+ \end{assumption} 
+Following assumption 1, $\mathbb{Y}_D^{\infty}$ is the largest set within which every possible exogenous disturbance $y_D(t)$ lies. That is, $y_D(t) \in \mathbb{Y}_D^{\infty} \hspace{2pt}  \forall \ZZ^{+}$.  In a polyhedral form, this set defining the point wise in time values of $y_D(t)$ is written as $\mathbb{Y}_D^{\infty} = \{y_D(t):H_Dy_D(t) \leq h_D \forall t \in \ZZ^+\}$. \\
+ Since $y_D(t)$ lies within $\mathbb{Y}_D^{\infty}$ at each time instant $t$, we can define a sequence $y_D \in \mathbb{Y}_D$ starting from time instant $t$ and going $N_P$ time steps into the future $\{y_D(t+k)\in\mathbb{Y}_D,k=1,..,N_P\}$ as:
+ \begin{equation}
+ \small
+ \begin{matrix}
+ \mathbb{Y}_D=\begin{Bmatrix}y_D:
+ \begin{bmatrix}
+ H_D & . & . & 0 \\
+ . & H_D & . & .\\
+ . & . & . & . \\
+ 0 & . & . & H_D
+ \end{bmatrix}
+ \begin{bmatrix}
+ y_D(t+1) \\ . \\ . \\ y_D(t+N_P)
+ \end{bmatrix}
+ \leq \begin{bmatrix}
+ h_D \\ . \\ . \\  h_D
+ \end{bmatrix}
+ \end{Bmatrix} 
+ \\ \\
+ \hspace{-120pt}
+ = 
+ \{ y_D: \tilde{H}_D y \leq \tilde{h}_D \}
+ \end{matrix}
+ \label{YD_set}
+ \end{equation} 
+At any future time instant $t+k$ from the current time instant $t$, given the model \eqref{ssD} and initial condition $x_D(t)$, the output $y_D(t+k)$ can be written as:
+\begin{equation}
+\small
+\begin{matrix}
+y_D(t+k)=C_DA_D^{k}x_D(t)+ C_D\sum\limits_{j=0}^{k-1}A_D^jB_Dw(t+k-1-j)+D_Dw(t+k) \\
+\end{matrix}
+\label{expanded_xD}
+\end{equation}
+Similar to before, we construct a set $\mathbb{O}^D_{N_P}$ defined as:
+  \begin{equation}
+  \begin{matrix}
+  \mathbb{O}^D_{N_P} = \{(x_D(t),w):y_D\in \mathbb{Y}_D \hspace{10pt} \forall k \in \{1,2,..,N_P\} \}  \\
+    \hspace{32pt} = \{(x_D(t),w):\tilde{H}_Dy_D \leq \tilde{h}_D \hspace{10pt} \forall k \in \{1,2,..,N_P\} \} 
+  \end{matrix}
+  \label{O_D_form}
+  \end{equation}
+  This is the set of initial conditions $x_D(t)$ and exogenous disturbance input sequence $\{w(t+k),k \in 0, 1, .., N_P\}$, such that the output of the system \eqref{ssD} always stays inside the set defined by \eqref{YD_set}. Using the prediction of the output given by \eqref{expanded_xD} in \eqref{O_D_form}, 
+  the set $\mathbb{O}_N^D$ can be rewritten as \eqref{OND_set}, which is rewritten in \eqref{condensed_OND} in a condensed form:
+  \begin{equation}
+  \mathbb{O}_N^D=\{(x_D(t),w): \tilde{H}_D(H_x^Dx_D(t)+H_ww) \leq \tilde{h}_D\}
+  \label{condensed_OND}
+  \end{equation}
+  Hence, given an initial condition $x_D(t)=x_D$, we can calculate the set $\mathbb{W}(x_D)$ as:
+  \begin{equation}
+  \begin{matrix}
+  \mathbb{W}(x_D) = \{w: \tilde{H}_DH_ww \leq \tilde{h}_D-\tilde{H}_DH_x^Dx_D\} \\
+  \hspace{-20pt}
+   = \{w: Gw \leq g_x(x_D)\}
+   \end{matrix}
+   \label{w_xd_set}
+  \end{equation}
+  This is the largest set in which the disturbance input sequence $\{w(t+k),k \in 0,1,..,N_P\}$ can lie in, such that the corresponding output sequence $\{y_D(t+k),k \in 1,..,N_P\}$ always lies within \eqref{YD_set}. \\
+  To calculate the input feasible set $\mathbb{O}_{N_P}$ by solving the equations in \eqref{overall}, we need the initial state $x(t)$ of the system \eqref{ssmodel}. This initial state includes $x_D(t)$. We can use this to first calculate the corresponding disturbance sequence set $\mathbb{W}$ to calculate the set $\mathbb{O}_{N_P}$ as shown in \eqref{overall}. This can then be used in the MPC scheme \eqref{RMPC} to calculate the optimal control input $\bar{u}$. This procedure is summarized in Algorithm \ref{alg:mpc_wLP}.
+   \algblockdefx[Name]{Repeat}{Until}[1][Unknown]{\textbf{Repeat} #1}{\textbf{Until }}
+   \begin{algorithm}[t]
+   	\caption{Robust MPC scheme}\label{alg:mpc_wLP}
+   	\begin{algorithmic}[1]
+   		\Repeat[every sampling instant:  $t=0,1,\ldots$]
+   		\State Read current state $x(t)$, set $x_D = x_D(t)$
+   		\State Calculate $\mathbb{W}(x_D)$ according to \eqref{w_xd_set}, set $\mathbb{W}=\mathbb{W}(x_D)$
+   		\State Solve the linear programs in \eqref{overall} to obtain $\mathbb{O}_{N_P}$
+   		\State Use $\mathbb{O}_{N_P}$ in \eqref{RMPC} to obtain control input $\bar{u}$
+   		\State Apply $\bar{u}$ to the plant
+   		\Until end of run
+   	\end{algorithmic}
+   \end{algorithm}
+  \\
+ {\color{blue}{Ideas: Say first N data points are collected. An outer bounding polyhedral set $\mathbb{Y}^D_N$ is calculated, that encompasses all the points in $U_N$. Now, every point in $U_N$ lies in this set. As the number of data points increase, we will obtain for sure $\mathbb{Y}^D_{N} \subseteq \mathbb{Y}^D_{N+1}$. Assuming we have infinite data, we have the largest set $\mathbb{Y}^D_{\infty}$ in which every possible $y_D(t)$ will lie. Let $\mathbb{Y}_{\infty}^D$ be a polyhedron $H_Dy_D(t) \leq h_D$. Then, starting at a timestep $t$, if we define $y_D \in \mathbb{Y}_D$ as the sequence $\{y_D(t+k)\in\mathbb{Y}_D,k=1,..,N_P\}$, we can write the set $\mathbb{Y}_D$ as:
  		  \begin{equation*}
  		  \small
  		  \mathbb{Y}_D=\begin{Bmatrix}y_D:
@@ -361,18 +490,7 @@ Using the form in  Eq.\eqref{elongform}, the constraints can be enumerated as sh
 	y_D(t+k)=C_DA_D^{k}x_D(t)+ C_D\sum\limits_{j=0}^{k-1}A_D^jB_Dw(t+k-1-j)+D_Dw(t+k) \\ \hspace{150pt}\text{ if } k>0
 	\end{matrix}
 	\end{equation}
-    Collecting the disturbance input sequences  $\{w(t+k):k=1:N_P\}$ in a vector $\vec{w}$, the set $\vec{\mathbb{W}}(x_D(t))$ can be written as:
-    \begin{equation}
-\small
-    \vec{\mathbb{W}}(x_D(t))=\begin{Bmatrix}\vec{w}:H_D\begin{pmatrix}\begin{bmatrix}C_D \\ C_DA_D\\ . \\ . \\ C_DA_D^{N_P}\end{bmatrix}x_D(t) + \begin{bmatrix}
-    D_D & 0 & . & . & 0 \\
-    C_DB_D & D_D & . & . & 0 \\
-    C_DA_DB_D & C_DB_D & D_D & . & 0 \\
-    . &  &  &  & . \\
-    C_DA_D^{N_P-1} & . & . & . & D_D
-    \end{bmatrix}\bar{w}\end{pmatrix} \leq \begin{bmatrix} h_D \\ h_D \\ . \\ . \\ h_D \end{bmatrix} 
-    \end{Bmatrix}
-    \end{equation}      
+    Collecting the disturbance input sequences  $\{w(t+k):k=1:N_P\}$ in a vector $\vec{w}$, the set $\vec{\mathbb{W}}(x_D(t))$ can be written as:     
     Hence, at each time step $t$, the state of the disturbance model $x_D(t)$ can be read, and the corresponding disturbance input set $\vec{\mathbb{W}}(x_D(t))$ can be calculated. Following this, the linear programs in  Eq.\eqref{overall}, which are rewritten as follows are solved:
     \begin{equation}
     h_{YW}^i = h_Y^i-\underset{\vec{w}\in \vec{\mathbb{W}}(x_D(t))}{\text{sup}} H_w^i \vec{w}  
