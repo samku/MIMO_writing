@@ -59,6 +59,7 @@
 \newtheorem{lemma}{Lemma}
 \newtheorem{theorem}{Theorem}
 \newtheorem{assumption}{Assumption}
+\newtheorem{proposition}{Proposition}
 \usepackage{lineno,amssymb,subcaption,algpseudocode,algorithm}
 
 
@@ -286,6 +287,7 @@ Since the output feasibility should hold over all possible future disturbance se
 \small
 \mathbb{O}_{N_P}=\{(x(t),\bar{u}): 	H_xx(t) +
 H_u\bar{u}\in \mathbb{Y} \sim D\mathbb{W} \sim .. \sim CA^{t+N_P-1}B\mathbb{W}  \}
+\label{Minkowski}
 \end{equation}
 where $\sim$ denotes P-subtraction of sets. Towards this end, we first rewrite \eqref{O_set} as: 
   \begin{equation}
@@ -319,12 +321,12 @@ where $\sim$ denotes P-subtraction of sets. Towards this end, we first rewrite \
   \end{matrix}
   \end{equation}
   where $G_x=\tilde{H}H_x$, $G_u=\tilde{H}H_u$ and $G_w=\tilde{H}H_w$.
-  Row $i$ of the matrix associated to the future disturbance sequence $w$ is denoted as $G^i_w$, and element $i$ of the vector $\tilde{h}$ is denoted by $h_Y^i$.
+  Row $i$ of the matrix $G_w$ is denoted as $G^i_w$, and element $i$ of the vector $\tilde{h}$ is denoted as $h_Y^i$.
    For polyhedral sets like in our case, performing P-subtractions results in the set:
   \begin{equation}
   \begin{matrix}
   \mathbb{O}_{N_P} = \{ (x(t),\bar{u}):G_xx(t)+G_u\bar{u})\leq h_{YW} \} \vspace{5pt} \\ 
-  h_{YW}^i = h_Y^i-\underset{w\in \mathbb{W}}{\text{sup}} G_w^i \vec{w}
+  h_{YW}^i = h_Y^i-\underset{w\in \mathbb{W}}{\text{sup}} G_w^i w
   \end{matrix}
   \label{overall}
   \end{equation}
@@ -367,7 +369,7 @@ where $\sim$ denotes P-subtraction of sets. Towards this end, we first rewrite \
   \begin{table*}[t]
    \begin{equation}
    \small
-   \mathbb{O}_N^D=\begin{Bmatrix}(x_D(t),w):\tilde{H}_D\begin{pmatrix}\begin{bmatrix} C_DA_D\\ C_DA_D^2 \\ . \\ . \\ C_DA_D^{N_P}\end{bmatrix}x_D(t) + \begin{bmatrix}
+   \mathbb{O}_{N_P}^D=\begin{Bmatrix}(x_D(t),w):\tilde{H}_D\begin{pmatrix}\begin{bmatrix} C_DA_D\\ C_DA_D^2 \\ . \\ . \\ C_DA_D^{N_P}\end{bmatrix}x_D(t) + \begin{bmatrix}
    C_DB_D & D_D & . & . & 0 \\
    C_DA_DB_D & C_DB_D & D_D & . & 0 \\
    . &  &  &  & . \\
@@ -425,9 +427,9 @@ Similar to before, we construct a set $\mathbb{O}^D_{N_P}$ defined as:
   \label{O_D_form}
   \end{equation}
   This is the set of initial conditions $x_D(t)$ and exogenous disturbance input sequence $\{w(t+k),k \in 0, 1, .., N_P\}$, such that the output of the system \eqref{ssD} always stays inside the set defined by \eqref{YD_set}. Using the prediction of the output given by \eqref{expanded_xD} in \eqref{O_D_form}, 
-  the set $\mathbb{O}_N^D$ can be rewritten as \eqref{OND_set}, which is rewritten in \eqref{condensed_OND} in a condensed form:
+  the set $\mathbb{O}_{N_P}^D$ can be rewritten as \eqref{OND_set}, which is rewritten in \eqref{condensed_OND} in a condensed form:
   \begin{equation}
-  \mathbb{O}_N^D=\{(x_D(t),w): \tilde{H}_D(H_x^Dx_D(t)+H_ww) \leq \tilde{h}_D\}
+  \mathbb{O}_{N_P}^D=\{(x_D(t),w): \tilde{H}_D(H_x^Dx_D(t)+H_ww) \leq \tilde{h}_D\}
   \label{condensed_OND}
   \end{equation}
   Hence, given an initial condition $x_D(t)=x_D$, we can calculate the set $\mathbb{W}(x_D)$ as:
@@ -439,8 +441,12 @@ Similar to before, we construct a set $\mathbb{O}^D_{N_P}$ defined as:
    \end{matrix}
    \label{w_xd_set}
   \end{equation}
-  This is the largest set in which the disturbance input sequence $\{w(t+k),k \in 0,1,..,N_P\}$ can lie in, such that the corresponding output sequence $\{y_D(t+k),k \in 1,..,N_P\}$ always lies within \eqref{YD_set}. \\
-  To calculate the input feasible set $\mathbb{O}_{N_P}$ by solving the equations in \eqref{overall}, we need the initial state $x(t)$ of the system \eqref{ssmodel}. This initial state includes $x_D(t)$. We can use this to first calculate the corresponding disturbance sequence set $\mathbb{W}$ to calculate the set $\mathbb{O}_{N_P}$ as shown in \eqref{overall}. This can then be used in the MPC scheme \eqref{RMPC} to calculate the optimal control input $\bar{u}$. This procedure is summarized in Algorithm \ref{alg:mpc_wLP}.
+  This is the largest set in which the disturbance input sequence $\{w(t+k),k \in 0,1,..,N_P\}$ can lie in, such that the corresponding output sequence $\{y_D(t+k),k \in 1,..,N_P\}$ always lies within \eqref{YD_set}. 
+   \begin{assumption}
+   The set $\mathbb{O}_{N_P}$ as defined in \eqref{Minkowski} is non-empty for $\mathbb{W}=\mathbb{W}(x_D(t))$ for all possible $x_D(t)$.
+   \end{assumption}
+      \indent
+  To calculate the input feasible set $\mathbb{O}_{N_P}$ by solving the equations in \eqref{overall}, we need the initial state $x(t)$ of the system \eqref{ssmodel}. This initial state includes $x_D(t)$. We can use this to first calculate the corresponding disturbance sequence set $\mathbb{W}(x_D)$, and set $\mathbb{W}=\mathbb{W}(x_D)$. Following this, we calculate the set $\mathbb{O}_{N_P}$ as shown in \eqref{overall}. Assuming assumption 2 holds, the MPC scheme \eqref{RMPC} to calculate the optimal control input $\bar{u}$. This procedure is summarized in Algorithm \ref{alg:mpc_wLP}.
    \algblockdefx[Name]{Repeat}{Until}[1][Unknown]{\textbf{Repeat} #1}{\textbf{Until }}
    \begin{algorithm}[t]
    	\caption{Robust MPC scheme}\label{alg:mpc_wLP}
@@ -454,6 +460,48 @@ Similar to before, we construct a set $\mathbb{O}^D_{N_P}$ defined as:
    		\Until end of run
    	\end{algorithmic}
    \end{algorithm}
+\\
+\indent
+  It should be noted that according to Algorithm \ref{alg:mpc_wLP}, at each time step $t$, $n_cN_P$ number of linear programs in \eqref{overall} for the worst case disturbance sequences of $w$ should be solved, before solving the quadratic program \eqref{RMPC}. This online computation might be infeasible in practical applications. In such applications, it is desirable to calculate the sets $\mathbb{W}$ and $\mathbb{O}_{N_P}$ offline. 
+  \\ \indent
+  To calculate these sets offline, we first define the set $\mathbb{X}^D = \{x_D: G^D_xx_D \leq g^D_x\}$. This is the set of all the initial conditions that the disturbance block with state-space model \eqref{ssD} can take. If the state-space model \eqref{ssD} is a non-minimal realization of the I/O model $y_D(t) = D(q^{-1})w(t)$, the state vector $x_D(t)$ at any time instant $t$ is a collection of the previous outputs $y_D(t)$. This is because the model $D(q^{-1})= 1/A(q^{-1})$ means that there is no dependence of current output $y_D(t)$ on past input sequence $\{w(k),k < t\}$. Following assumption 1, if we can build the set $\mathbb{Y}_D^{\infty}$ in which the output $y_D(t)$ can lie at any instant of time $t$, construction of the corresponding set $\mathbb{X}^D$ becomes trivial, and follows along the lines of \eqref{YD_set}. Upon construction of $\mathbb{X}^D$, we can define the disturbance sequence set $\mathbb{W}_{\Omega}$ as:
+  \begin{equation}
+  \begin{matrix}
+  \hspace{-130pt}
+  \mathbb{W}_{\Omega} = \text{proj}_w(\mathbb{O}_{N_P}^D)
+  \vspace{5pt}
+  \\
+  \hspace{20pt}
+  =\{w: \exists x_D(t) \in \mathbb{X}^D : \tilde{H}_D(H_x^Dx_D(t)+H_ww) \leq \tilde{h}_D\}
+  \end{matrix}
+  \label{proj_set}
+  \end{equation}
+  By setting $\mathbb{W}=\mathbb{W}_{\Omega}$ in \eqref{overall}, the set $\mathbb{O}_{N_P}$ can be constructed offline. This set can be used to calculate the optimal control input $\bar{u}$ by solving \eqref{RMPC}. These steps are summarized in Algorithm \ref{alg:mpc_proj}.
+  \algblockdefx[Name]{Repeat}{Until}[1][Unknown]{\textbf{Repeat} #1}{\textbf{Until }}
+  \begin{algorithm}[t]
+  	\caption{Robust MPC scheme with projected set}\label{alg:mpc_proj}
+  	\begin{algorithmic}[1]
+  		\State Compute $\mathbb{X}^D$ from $\mathbb{Y}_D^{\infty}$
+  		\State Perform set projection to compute $\mathbb{W}_{\Omega}$ according to \eqref{proj_set}
+  		\State Set $\mathbb{W}=\mathbb{W}_{\Omega}$, compute $\mathbb{O}_{N_P}$ according to \eqref{overall}
+  		\Repeat[every sampling instant:  $t=0,1,\ldots$]
+  		\State Read current state $x(t)$
+  		\State Use $\mathbb{O}_{N_P}$ in \eqref{RMPC} to obtain control input $\bar{u}$
+  		\State Apply $\bar{u}$ to the plant
+  		\Until end of run
+  	\end{algorithmic}
+  \end{algorithm}
+  \begin{proposition}
+  	Using Algorithm \ref{alg:mpc_proj} instead of Algorithm \ref{alg:mpc_wLP} to compute $\bar{u}$ results in conservative controller performance.
+  \end{proposition}
+\hspace{4pt}
+  \textit{Proof:}
+  By construction, $\mathbb{W}(x_D(t)) \subseteq \mathbb{W}_{\Omega} \hspace{2pt} \forall x_D(t) \in \mathbb{X}^D$. This means that in \eqref{overall}, 
+  \begin{equation}
+  \underset{w\in \mathbb{W}(x_D(t))}{\text{sup}} G_w^i w \leq  \underset{w\in \mathbb{W}_{\Omega}}{\text{sup}} G_w^i w \hspace{10pt} \forall x_D(t) \in \mathbb{X}^D
+  \end{equation}
+  If assumption 2 holds, the resulting set $\mathbb{O}_{N_P}$ is non-empty for $\mathbb{W}=\mathbb{W}_{\Omega}$, since it is non-empty for all $x_D(t) \in \mathbb{X}^D$. In combination, it means that the resulting set.
+  This means that on propagating the system \eqref{expanded_xD} with initial condition $x_D(t) \in \mathbb{X}^D$, the corresponding output sequence set is $y_D \in \mathbb{Y}_D^{\Omega}  \supseteq  \mathbb{Y}_D$.
   \\
  {\color{blue}{Ideas: Say first N data points are collected. An outer bounding polyhedral set $\mathbb{Y}^D_N$ is calculated, that encompasses all the points in $U_N$. Now, every point in $U_N$ lies in this set. As the number of data points increase, we will obtain for sure $\mathbb{Y}^D_{N} \subseteq \mathbb{Y}^D_{N+1}$. Assuming we have infinite data, we have the largest set $\mathbb{Y}^D_{\infty}$ in which every possible $y_D(t)$ will lie. Let $\mathbb{Y}_{\infty}^D$ be a polyhedron $H_Dy_D(t) \leq h_D$. Then, starting at a timestep $t$, if we define $y_D \in \mathbb{Y}_D$ as the sequence $\{y_D(t+k)\in\mathbb{Y}_D,k=1,..,N_P\}$, we can write the set $\mathbb{Y}_D$ as:
  		  \begin{equation*}
