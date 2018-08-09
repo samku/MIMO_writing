@@ -496,11 +496,13 @@ Similar to before, we construct a set $\mathbb{O}^D_{N_P}$ defined as:
   \end{proposition}
 \hspace{4pt}
   \textit{Proof:}
+  Let $\mathbb{O}_{N_P}^1$ and $\mathbb{O}_{N_P}^2$ be the two polyhedral sets constructed in Algorithm \ref{alg:mpc_wLP} and Algorithm \ref{alg:mpc_proj} respectively.
   By construction, $\mathbb{W}(x_D(t)) \subseteq \mathbb{W}_{\Omega} \hspace{2pt} \forall x_D(t) \in \mathbb{X}^D$. This means that in \eqref{overall}, 
   \begin{equation}
   \underset{w\in \mathbb{W}(x_D(t))}{\text{sup}} G_w^i w \leq  \underset{w\in \mathbb{W}_{\Omega}}{\text{sup}} G_w^i w \hspace{10pt} \forall x_D(t) \in \mathbb{X}^D
   \end{equation}
-  If assumption 2 holds, the resulting set $\mathbb{O}_{N_P}$ is non-empty for $\mathbb{W}=\mathbb{W}_{\Omega}$, since it is non-empty for all $x_D(t) \in \mathbb{X}^D$. In combination, it means that the resulting set.
+  Since $G_x$ and $G_u$ in \eqref{overall} are the same for $\mathbb{O}_{N_P}^1$ and $\mathbb{O}_{N_P}^2$, $\mathbb{O}_{N_P}^2 \subseteq \mathbb{O}_{N_P}^1 \forall x_D(t) \in \mathbb{X}^D$.
+  If Assumption 2 holds, the set $\mathbb{O}_{N_P}^2$ is non-empty. Hence, a feasible solution $\bar{u}$ exists when \eqref{RMPC} is solved, but it belongs to a smaller set resulting in a conservative solution.\\
   This means that on propagating the system \eqref{expanded_xD} with initial condition $x_D(t) \in \mathbb{X}^D$, the corresponding output sequence set is $y_D \in \mathbb{Y}_D^{\Omega}  \supseteq  \mathbb{Y}_D$.
   \\
  {\color{blue}{Ideas: Say first N data points are collected. An outer bounding polyhedral set $\mathbb{Y}^D_N$ is calculated, that encompasses all the points in $U_N$. Now, every point in $U_N$ lies in this set. As the number of data points increase, we will obtain for sure $\mathbb{Y}^D_{N} \subseteq \mathbb{Y}^D_{N+1}$. Assuming we have infinite data, we have the largest set $\mathbb{Y}^D_{\infty}$ in which every possible $y_D(t)$ will lie. Let $\mathbb{Y}_{\infty}^D$ be a polyhedron $H_Dy_D(t) \leq h_D$. Then, starting at a timestep $t$, if we define $y_D \in \mathbb{Y}_D$ as the sequence $\{y_D(t+k)\in\mathbb{Y}_D,k=1,..,N_P\}$, we can write the set $\mathbb{Y}_D$ as:
