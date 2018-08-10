@@ -32,7 +32,7 @@
 \usepackage{mathtools}
 \usepackage{relsize}
 \usepackage{tikz}
-\graphicspath{{./Drawings/}} 
+\graphicspath{{./Drawings/Draw/}} 
 \newcommand{\notimplies}{%
 	\mathrel{{\ooalign{\hidewidth$\not\phantom{=}$\hidewidth\cr$\implies$}}}}
 \usepackage[margin=0.8cm]{caption}
@@ -120,11 +120,13 @@ y(t)=M(q^{-1})u(t)+D(q^{-1})w(t)
 \label{tfmodel}
 \end{equation}
 where the transfer functions are $M(q^{-1})=B(q^{-1})/A(q^{-1})$ and $D(q^{-1})=1/A(q^{-1})$. Hence, the output $y(t)$ is the sum of outputs of two systems, a schematic of which is shown here:
-\begin{figure}[h]
-	\hspace{20pt}
-	\includegraphics[scale=0.15]{schematic.jpeg}
-	\caption{ARX model}
-\end{figure} \\
+	\begin{figure}[t]
+		\vspace{-3pt}
+		\hspace{45pt}
+		\includegraphics[scale = 01.1]{final_robust.pdf}
+		\label{fullloop}
+		\caption{ARX model}
+	\end{figure} 
 If the dataset $D_N$ is noise-free, the part $y_D(t)$ of the output $y(t)$ that the model $M(q^{-1})$ does not capture can be attributed to model uncertainty. Hence, the uncertainty is modeled as an exogenous disturbance signal acting on the output. Robust model-based control schemes can utilize this model for controller synthesis, provided the uncertainty set the exogenous disturbance signal $w(t)$ belongs to is available. In the next section, one such control scheme is discussed. Following that, a method to obtain the set in which $w(t)$ lies is presented.
   \section{Robust controller design}
   For controller synthesis, we first
@@ -502,8 +504,8 @@ Similar to before, we construct a set $\mathbb{O}^D_{N_P}$ defined as:
   \underset{w\in \mathbb{W}(x_D(t))}{\text{sup}} G_w^i w \leq  \underset{w\in \mathbb{W}_{\Omega}}{\text{sup}} G_w^i w \hspace{10pt} \forall x_D(t) \in \mathbb{X}^D
   \end{equation}
   Since $G_x$ and $G_u$ in \eqref{overall} are the same for $\mathbb{O}_{N_P}^1$ and $\mathbb{O}_{N_P}^2$, $\mathbb{O}_{N_P}^2 \subseteq \mathbb{O}_{N_P}^1 \forall x_D(t) \in \mathbb{X}^D$.
-  If Assumption 2 holds, the set $\mathbb{O}_{N_P}^2$ is non-empty. Hence, a feasible solution $\bar{u}$ exists when \eqref{RMPC} is solved, but it belongs to a smaller set resulting in a conservative solution.\\
-  This means that on propagating the system \eqref{expanded_xD} with initial condition $x_D(t) \in \mathbb{X}^D$, the corresponding output sequence set is $y_D \in \mathbb{Y}_D^{\Omega}  \supseteq  \mathbb{Y}_D$.
+  If Assumption 2 holds, the set $\mathbb{O}_{N_P}^2$ is non-empty. Hence, a feasible solution $\bar{u}$ exists when \eqref{RMPC} is solved, but it belongs to a smaller set resulting in a conservative solution.\hfill\QED  \\
+  This conservativeness arises because on propagating the system \eqref{expanded_xD} with initial condition $x_D(t) \in \mathbb{X}^D$, the corresponding output sequence set is $y_D \in \mathbb{Y}_D^{\Omega}  \supseteq  \mathbb{Y}_D$. 
   \\
  {\color{blue}{Ideas: Say first N data points are collected. An outer bounding polyhedral set $\mathbb{Y}^D_N$ is calculated, that encompasses all the points in $U_N$. Now, every point in $U_N$ lies in this set. As the number of data points increase, we will obtain for sure $\mathbb{Y}^D_{N} \subseteq \mathbb{Y}^D_{N+1}$. Assuming we have infinite data, we have the largest set $\mathbb{Y}^D_{\infty}$ in which every possible $y_D(t)$ will lie. Let $\mathbb{Y}_{\infty}^D$ be a polyhedron $H_Dy_D(t) \leq h_D$. Then, starting at a timestep $t$, if we define $y_D \in \mathbb{Y}_D$ as the sequence $\{y_D(t+k)\in\mathbb{Y}_D,k=1,..,N_P\}$, we can write the set $\mathbb{Y}_D$ as:
  		  \begin{equation*}

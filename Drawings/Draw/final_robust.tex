@@ -7,6 +7,7 @@
 \usepackage{amsmath} % assumes amsmath package installed
 \usepackage{amssymb}  % assumes amsmath package installed
 \usepackage{mathtools}
+\usepackage{bm}
 
 \usepackage[active,tightpage]{preview}
 \PreviewEnvironment{tikzpicture}
@@ -16,43 +17,23 @@
 
 
 \begin{tikzpicture}[y=0.80pt, x=0.80pt, yscale=-1.000000, xscale=1.000000, inner sep=0pt, outer sep=0pt]  
-    % \draw[->,line width=1pt] (-30,80) -- (0,80);
-    \draw[line width=1pt] (-40,70) rectangle (-20,90);
-    \node at (-30,80) {\small $\mathbb{K}_P$};
-    \draw[->,line width=1pt] (-20,80) -- (10,80);
-    \draw[line width=1pt] (10,70) rectangle (30,90);
-    \node at (20,80) {\small $\mathbb{G}_P$};
-    \draw[->,line width=1pt] (30,80) -- (65,80);
-    \node at (55,70) {\small $y(t)$};
-    \draw[line width=1pt] (20,90) -- (20,105.5);
-    \draw[line width=1pt] (20.5,105) -- (-29.5,105);
-    \draw[->,line width=1pt] (-30,104.5) -- (-30,90);
-    %\draw[->,line width=1pt] (-20,80) -- (10,80);
-    %\node at (-5,70) {\small $v(t)$};
-	%\draw[->,line width=1pt] (90,80) -- (120,80);
-    \draw[line width=1pt,dashed] (-50,40) rectangle (40,120);
-    \node at (-72,125) {\small $x(t)$};
-	\draw[line width=1pt] (-5,120) -- (-5,135.5);
-	\draw[line width=1pt] (-4.5,135) -- (-150.5,135);
-	\draw[->,line width=1pt] (-150,135.5) -- (-150,120);
-	\node at (-4,48) {\small Closed-loop plant};
-	%MPC
-	\draw[line width=1pt] (-200,40) rectangle (-100,120);
 	\draw[line width=1pt] (-170,60) rectangle (-130,100);
-	\draw[->,line width=1pt] (-190,80) -- (-170,80);
-	\node at (-180,70) {\small $g(t)$};
-	\draw[->,line width=1pt] (-130,70) -- (-110,70);
-	\node at (-115,62) {\small $y(t)$};
-	\draw[->,line width=1pt] (-130,90) -- (-110,90);
-	\node at (-115,98) {\small $u(t)$};
-	\node at (-182,112) {\small $RMPC$};
-	\node at (-150,80) {\small $\mathbb{M}_{PD}^{'}$};
-	\draw[->,line width=1pt] (-220,80) -- (-200,80);
-	\node at (-210,70) {\small $r(t)$};
-	\draw[->,line width=1pt] (-100,80) -- (-40,80);
-	\node at (-72,70) {\small $g(t)$};
-	\node at (-138,50) {\small $n(t)$};
-	\draw[->,line width=1pt] (-150,45) -- (-150,60);
+	\draw[->,line width=1pt] (-200,80) -- (-170,80);
+	\node at (-185,85) {\tiny $u(t)$};
+	\draw[->,line width=1pt] (-130,80) -- (-101,80);
+	\node at (-115,85) {\tiny $y_M(t)$};
+	\node at (-150,80) {\small $M(q^{-1})$};
+	\draw[line width=1pt] (-93,80) circle (6pt);
+	\node at (-97.5,80) {\tiny \bm{$+$}};
+	\node at (-93,76) {\tiny \bm{$+$}};
+	\draw[->,line width=1pt] (-93,55) -- (-93,72);
+	\draw[line width=1pt] (-113,20) rectangle (-73,55);
+	\node at (-93,37.5) {\small $D(q^{-1})$};
+	\draw[->,line width=1pt] (-93,0) -- (-93,20);
+	\node at (-82,63.5) {\tiny $y_D(t)$};
+	\node at (-82,10) {\tiny $w(t)$};
+	\draw[->,line width=1pt] (-85,80) -- (-60,80);
+	\node at (-72.5,85) {\tiny $y(t)$};
 \end{tikzpicture}
 \end{document}
 
