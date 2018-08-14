@@ -358,7 +358,6 @@ where $\sim$ denotes P-subtraction of sets. Towards this end, we first rewrite \
   \end{matrix}
   \label{ssM}
   \end{equation}
-  \fi
  {\color{red}{with the initial condition $x_M(0)=0$}}.
  \\
   \begin{equation}
@@ -368,6 +367,7 @@ where $\sim$ denotes P-subtraction of sets. Towards this end, we first rewrite \
   \end{matrix} 
   \label{ssmodel_condensed}
   \end{equation}
+  \fi
   \begin{table*}[t]
    \begin{equation}
    \small
@@ -377,12 +377,17 @@ where $\sim$ denotes P-subtraction of sets. Towards this end, we first rewrite \
    . &  &  &  & . \\
    . &  &  &  & . \\
    C_DA_D^{N_P-1} & . & . & . & D_D
-   \end{bmatrix}w\end{pmatrix} \leq \tilde{h}_D
+   \end{bmatrix}
+   \begin{bmatrix}
+   w(t) \\ w(t+1) \\ . \\ . \\ w(t+N_P)
+   \end{bmatrix}
+   \end{pmatrix} \leq \tilde{h}_D
    \end{Bmatrix}
    \label{OND_set}
    \end{equation} 
   \end{table*}
- After collecting N data points of $y_D(k)$, an outer bounding polyhedral set $\mathbb{Y}_D^N$ is constructed that encompasses the whole dataset $U_N$. As the number of data points in the experiment increase, we obtain $\mathbb{Y}_D^{N} \subseteq \mathbb{Y}_D^{N+1}$ since $\mathbb{Y}_D^{N+1} =  \mathbb{Y}_D^{N} \cup \{y_D(N+1)\}$.  
+ After collecting N data points of $y_D(k)$, an outer bounding convex polyhedral set $\mathbb{Y}_D^N$ is constructed that encompasses the whole dataset $U_N$. As the number of data points in the experiment increase, we obtain $\mathbb{Y}_D^{N} \subseteq \mathbb{Y}_D^{N+1}$ as
+ $\mathbb{Y}_D^{N} = conv(U_N)$ and  $\mathbb{Y}_D^{N+1} = conv(U_{N+1})=conv(U_{N} \cup \{y_D(N+1)\} )$, where $conv(X)$ is the convex hull of the set of elements within $X$. 
  \begin{assumption}
  	 In the limit of infinite data used to build $U_N$, the outer encompassing sets $\mathbb{Y}_D^{N}$ converge to a steady set $\mathbb{Y}_D^{\infty}$.
  \end{assumption} 
@@ -467,6 +472,7 @@ Similar to before, we construct a set $\mathbb{O}^D_{N_P}$ defined as:
   It should be noted that according to Algorithm \ref{alg:mpc_wLP}, at each time step $t$, $n_cN_P$ number of linear programs in \eqref{overall} for the worst case disturbance sequences of $w$ should be solved, before solving the quadratic program \eqref{RMPC}. This online computation might be infeasible in practical applications. In such applications, it is desirable to calculate the sets $\mathbb{W}$ and $\mathbb{O}_{N_P}$ offline. 
   \\ \indent
   To calculate these sets offline, we first define the set $\mathbb{X}^D = \{x_D: G^D_xx_D \leq g^D_x\}$. This is the set of all the initial conditions that the disturbance block with state-space model \eqref{ssD} can take. If the state-space model \eqref{ssD} is a non-minimal realization of the I/O model $y_D(t) = D(q^{-1})w(t)$, the state vector $x_D(t)$ at any time instant $t$ is a collection of the previous outputs $y_D(t)$. This is because the model $D(q^{-1})= 1/A(q^{-1})$ means that there is no dependence of current output $y_D(t)$ on past input sequence $\{w(k),k < t\}$. Following assumption 1, if we can build the set $\mathbb{Y}_D^{\infty}$ in which the output $y_D(t)$ can lie at any instant of time $t$, construction of the corresponding set $\mathbb{X}^D$ becomes trivial, and follows along the lines of \eqref{YD_set}. Upon construction of $\mathbb{X}^D$, we can define the disturbance sequence set $\mathbb{W}_{\Omega}$ as:
+  \vspace{-10pt} \\
   \begin{equation}
   \begin{matrix}
   \hspace{-130pt}
@@ -506,7 +512,8 @@ Similar to before, we construct a set $\mathbb{O}^D_{N_P}$ defined as:
   Since $G_x$ and $G_u$ in \eqref{overall} are the same for $\mathbb{O}_{N_P}^1$ and $\mathbb{O}_{N_P}^2$, $\mathbb{O}_{N_P}^2 \subseteq \mathbb{O}_{N_P}^1 \forall x_D(t) \in \mathbb{X}^D$.
   If Assumption 2 holds, the set $\mathbb{O}_{N_P}^2$ is non-empty. Hence, a feasible solution $\bar{u}$ exists when \eqref{RMPC} is solved, but it belongs to a smaller set resulting in a conservative solution.\hfill\QED  \\
   This conservativeness arises because on propagating the system \eqref{expanded_xD} with initial condition $x_D(t) \in \mathbb{X}^D$, the corresponding output sequence set is $y_D \in \mathbb{Y}_D^{\Omega}  \supseteq  \mathbb{Y}_D$. 
-  \\
+  It is noted that the presented approach to calculate the set $\mathbb{W}$ is useful not only for the control scheme presented in \eqref{RMPC}, but also for robust MPC schemes such as those presented in \cite{MAYNE2005219}, which employ a feedback gain to reduce the effect of disturbances on the output, and an MPC controller for tracking.
+  \iffalse
  {\color{blue}{Ideas: Say first N data points are collected. An outer bounding polyhedral set $\mathbb{Y}^D_N$ is calculated, that encompasses all the points in $U_N$. Now, every point in $U_N$ lies in this set. As the number of data points increase, we will obtain for sure $\mathbb{Y}^D_{N} \subseteq \mathbb{Y}^D_{N+1}$. Assuming we have infinite data, we have the largest set $\mathbb{Y}^D_{\infty}$ in which every possible $y_D(t)$ will lie. Let $\mathbb{Y}_{\infty}^D$ be a polyhedron $H_Dy_D(t) \leq h_D$. Then, starting at a timestep $t$, if we define $y_D \in \mathbb{Y}_D$ as the sequence $\{y_D(t+k)\in\mathbb{Y}_D,k=1,..,N_P\}$, we can write the set $\mathbb{Y}_D$ as:
  		  \begin{equation*}
  		  \small
@@ -555,6 +562,76 @@ Similar to before, we construct a set $\mathbb{O}^D_{N_P}$ defined as:
 Instead of solving so many LPs before a QP, we can project the set $\mathbb{W}$. For this, we need the set within which the state of the disturbance block can lie. This is possible to be obtained if we use a non-minimum realization as the state space model. When we have that, we can project within that subset and get a much more conservative thing. 
 Have to write a theorem that projection is a good idea : The obtained set is larger than the original. Assumption that origin lies with W or something, so that it is feasible. Proof by doing minkowski difference : Sup over a larger feasible set leads to a larger number : But that should not break the feasibility of MPC.
     
+    \fi
+\section{Numerical simulations}
+Numerical simulations are performed on a two-dimensional mass-spring-damper system to evaluate the approaches mentioned. The system is defined by the following state-space model:
+\begin{equation}
+\tiny
+\begin{matrix}
+\begin{bmatrix}
+\dot{x} \\ \ddot{x} \\ \dot{y} \\ \ddot{y} 
+\end{bmatrix} = 
+\begin{bmatrix}
+0 & 1 & 0 & 0 \\
+-K/m & -b/m & 0 & 0 \\
+0 & 0 & 0 & 1 \\
+0 & 0 & -K/m & -b/m
+\end{bmatrix}
+\begin{bmatrix}
+x \\ \dot{x} \\ y \\ \dot{y} 
+\end{bmatrix} + 
+\begin{bmatrix}
+0 & 0\\
+1/m & 0 \\
+0 & 0 \\
+0 & 1/m
+\end{bmatrix}
+\begin{bmatrix}
+F_x \\ F_y
+\end{bmatrix}  
+\vspace{2pt} 
+\\
+\begin{bmatrix}
+x \\ y 
+\end{bmatrix} =
+\begin{bmatrix}
+1 & 0 & 0 & 0\\
+0 & 0 & 1 & 0
+\end{bmatrix}
+\begin{bmatrix}
+x \\ \dot{x} \\ y \\ \dot{y} 
+\end{bmatrix}
+\end{matrix}
+\end{equation}
+with the parameters varying randomly every sampling instant between:
+\begin{table}[h!]
+	\hspace{50pt}
+	\begin{tabular}{||c|c||} 
+		\hline
+		Parameter & Range\\ [0.5ex] 
+		\hline\hline
+		$m$ & $5$ Kg - $5.1$ Kg \\
+		$b$ & $10$ Ns/m - $10.1$ Ns/m \\
+		$K$ & $5$ N/m - $5.2$ N/m \\
+		\hline
+	\end{tabular}
+	\label{Simparam}
+	\vspace{-10pt}  
+\end{table}\\
+Experiments are performed to identify a discrete time MIMO-ARX model of the system, by building the dataset $D_N$ with $N=10000$ sampled at $0.1s$. The models $M(q^{-1})$ and $D(q^{-1})$ are computed, as shown in \eqref{tfmodel}, from which non-minimum realization state space models in \eqref{ssmodel} are extracted. A horizon of $N_P=5$ is set in \eqref{RMPC}, and the matrices $G_x$ and $G_u$ in \eqref{overall} are computed, which are required for the calculation of $\mathbb{O}_{N_P}$.
+\\
+Then, the dataset $U_N$ of the samples of the signal $y_D(t)$ is constructed. From this dataset, $\mathbb{Y}_D^N$ is extracted, which is the outer bounding polyhedral set of each sample within $U_N$. This is shown in Figure \ref{Y_D^inf}.
+	\begin{figure}[t]
+		\vspace{-3pt}
+		\hspace{30pt}
+		\includegraphics[scale=0.7]{Y_D_set.eps}
+		\label{Y_D^inf}
+		\caption{Set $\mathbb{Y}_D^N$ obtained from $U_N$}
+	\end{figure} \\
+It is assumed that $\mathbb{Y}_D^{\infty}=\mathbb{Y}_D^N$, following which the set $\mathbb{Y}_D$ is calculated. It is the set in which the future sequence $\{y_D(k),k \in t+1,..,t+N_P\}$ starting from current time instant $t$ and going $N_P=5$ time-steps into the future lies. This lead to the construction of $\mathbb{O}_{N_P}^D$. This is the set of states $x_D(t)$ and future disturbance input sequence $\{w(k),k \in t,..,t+N_P\}$, such that the output set $\mathbb{Y}_D$ is respected. The state $x_D(t)$ of the non-minimum realization state-space model \eqref{ssD} is updated using a dead-beat observer at each time-step $t$, and the state $x_M(t)$ is updated only using the dynamics of the model. Thus, we have everything necessary to implement Algorithm \ref{alg:mpc_wLP}.
+\\
+\indent
+In-order to implement Algorithm \ref{alg:mpc_proj}, we first need the set $\mathbb{X}^D$ in which the state $x_D(t)$ lies at any time-instant $t$. Since the model \eqref{ssD} is a non-minimum realization, construction of $\mathbb{X}^D$ from $\mathbb{Y}_D^{\infty}$ becomes trivial. After calculating $\mathbb{X}^D$, the set $\mathbb{W}_{\Omega}$ is calculated by projecting $\mathbb{O}_{N_P}^D$ onto the $w$ coordinates. This set-projection operation was performed using the $projection$ function within the multi-parameteric toolbox \cite{mpt}.
 \bibliography{references}
 
 \end{document}

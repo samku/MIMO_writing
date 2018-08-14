@@ -6,4 +6,13 @@ A.~Bemporad and M.~Morari, ``Robust model predictive control: A survey,'' in
   {\em Robustness in identification and control} (A.~Garulli and A.~Tesi,
   eds.), (London), pp.~207--226, Springer London, 1999.
 
+\bibitem{MAYNE2005219}
+D.~Mayne, M.~Seron, and S.~Raković, ``Robust model predictive control of
+  constrained linear systems with bounded disturbances,'' {\em Automatica},
+  vol.~41, no.~2, pp.~219 -- 224, 2005.
+
+\bibitem{mpt}
+M.~Kvasnica, P.~Grieder, and M.~Baoti\'{c}, ``{Multi-Parametric Toolbox
+  (MPT)},'' 2004.
+
 \end{thebibliography}
