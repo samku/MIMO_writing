@@ -566,7 +566,7 @@ Have to write a theorem that projection is a good idea : The obtained set is lar
 \section{Numerical simulations}
 Numerical simulations are performed on a two-dimensional mass-spring-damper system to evaluate the approaches mentioned. The system is defined by the following state-space model:
 \begin{equation}
-\tiny
+\small
 \begin{matrix}
 \begin{bmatrix}
 \dot{x} \\ \ddot{x} \\ \dot{y} \\ \ddot{y} 
@@ -628,10 +628,32 @@ Then, the dataset $U_N$ of the samples of the signal $y_D(t)$ is constructed. Fr
 		\label{Y_D^inf}
 		\caption{Set $\mathbb{Y}_D^N$ obtained from $U_N$}
 	\end{figure} \\
-It is assumed that $\mathbb{Y}_D^{\infty}=\mathbb{Y}_D^N$, following which the set $\mathbb{Y}_D$ is calculated. It is the set in which the future sequence $\{y_D(k),k \in t+1,..,t+N_P\}$ starting from current time instant $t$ and going $N_P=5$ time-steps into the future lies. This lead to the construction of $\mathbb{O}_{N_P}^D$. This is the set of states $x_D(t)$ and future disturbance input sequence $\{w(k),k \in t,..,t+N_P\}$, such that the output set $\mathbb{Y}_D$ is respected. The state $x_D(t)$ of the non-minimum realization state-space model \eqref{ssD} is updated using a dead-beat observer at each time-step $t$, and the state $x_M(t)$ is updated only using the dynamics of the model. Thus, we have everything necessary to implement Algorithm \ref{alg:mpc_wLP}.
+It is assumed that $\mathbb{Y}_D^{\infty}=\mathbb{Y}_D^N$, following which the set $\mathbb{Y}_D$ is calculated. It is the set in which the future sequence $\{y_D(t+k),k \in 1,..,N_P\}$ starting from current time instant $t$ and going $N_P=5$ time-steps into the future lies. This lead to the construction of $\mathbb{O}_{N_P}^D$. This is the set of states $x_D(t)$ and future disturbance input sequence $\{w(t+k),k \in 0,..,N_P\}$, such that the output set $\mathbb{Y}_D$ is respected. The state $x_D(t)$ of the non-minimum realization state-space model \eqref{ssD} is updated using a dead-beat observer at each time-step $t$, and the state $x_M(t)$ is updated only using the dynamics of the model. Thus, we have everything necessary to implement Algorithm \ref{alg:mpc_wLP}.
 \\
 \indent
-In-order to implement Algorithm \ref{alg:mpc_proj}, we first need the set $\mathbb{X}^D$ in which the state $x_D(t)$ lies at any time-instant $t$. Since the model \eqref{ssD} is a non-minimum realization, construction of $\mathbb{X}^D$ from $\mathbb{Y}_D^{\infty}$ becomes trivial. After calculating $\mathbb{X}^D$, the set $\mathbb{W}_{\Omega}$ is calculated by projecting $\mathbb{O}_{N_P}^D$ onto the $w$ coordinates. This set-projection operation was performed using the $projection$ function within the multi-parameteric toolbox \cite{mpt}.
-\bibliography{references}
+In-order to implement Algorithm \ref{alg:mpc_proj}, we first need the set $\mathbb{X}^D$ in which the state $x_D(t)$ lies at any time-instant $t$. Since the model \eqref{ssD} is a non-minimum realization, construction of $\mathbb{X}^D$ from $\mathbb{Y}_D^{\infty}$ becomes trivial. After calculating $\mathbb{X}^D$, the set $\mathbb{W}_{\Omega}$ is calculated by projecting $\mathbb{O}_{N_P}^D$ onto the $w$ coordinates. This set-projection operation was performed using the $projection$ function within the multi-parameteric toolbox \cite{mpt}. Following this, we have everything necessary to implement Algorithm \ref{alg:mpc_proj}.
+\\
+\indent
+Alternative to the algorithms presented, one can just use the set $\mathbb{Y}_D$ as output additive disturbance, not acting through the model $D(q^{-1})$, and design a robust controller with respect to that set.  For this, the output $y_M(t)$ is desired to track the reference $r(t)$, and is constrained to lie within a reduced set $\tilde{\mathbb{Y}}=\mathbb{Y} \sim \mathbb{Y}_D$. The optimization problem equivalent to \eqref{RMPC} solved by the controller at each time-step $t$ in this case is:
+\begin{equation}
+\small
+\begin{aligned}
+\underset{\bar{u}}{\text{min}}
+&  \hspace{20pt} \mathlarger{\sum\limits_{k=1}^{N_P}}(\hat y_M(t+k)-r(t+k))^2 \\
+\text{subject to}
+%\begin{matrix}
+& \hspace{20pt} \hat{x}(t+k+1)_M = A_M\hat{x}_M(t+k) + B_M\bar{u}\\
+& \hspace{20pt} \hat y_M(t+k) = C_M\hat{x}_M(t+k) + D_M\bar{u} \\
+& \hspace{20pt} \hat{x}_M(t)=x_M(t) \\
+& \hspace{20pt} \hat{y}_M(t+k)\in \tilde{\mathbb{Y}},k=1,..,N_P
+%	& \hspace{20pt} Hy_{\gamma}(t) \leq h \mbox{\AB{I think $Hy_{\gamma}(t)\leq h$ is redundant}}\\
+%	& \hspace{20pt}  g(t+k) \in \mathbb{G}_{N_P}(\gamma(t)) \\
+%\end{matrix}
+\end{aligned}
+\label{RMPC_output}
+\end{equation}
+If the state-space model of $M(q^{-1})$ is a non-minimum realization,
+the state $x_M(t)$ is updated using a deadbeat observer, which places the past plant outputs $y(t)$ in a column vector.
 
+\bibliography{references}. 
 \end{document}
