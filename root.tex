@@ -70,11 +70,11 @@
 \newcommand{\smallmat}[1]{\left[ \begin{smallmatrix}#1 \end{smallmatrix} \right]}
 
 \title{\LARGE \bf
-Identification of exogenous disturbance signal sets
+Robustified model predictive control through characterization of exogenous disturbance uncertainty sets of uncertain ARX models
 }
 
 
-\author{XYZ, A.Bemporad% <-this % stops a space
+\author{Sampath Kumar Mulagaleti, Alberto Bemporad% <-this % stops a space
 \thanks{*This work was not supported by any organization}% <-this % stops a space
 \thanks{Sampath Kumar Mulagaleti and Alberto Bemporad are with
 		the IMT School for Advanced Studies Lucca, Piazza San Francesco 19,
@@ -96,7 +96,7 @@ Identification of exogenous disturbance signal sets
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
 
-This work deals with uncertain linear models of dynamical systems, with the uncertainty modeled as an exogenous disturbance signal acting on the output. A method to identify the set within which this uncertainty lies is presented. 
+Robust model predictive control (MPC) techniques require an explicit characterization of the uncertainty within the model employed. Characterization of the uncertainty as parameter variability has been discussed extensively in literature, but little is found with respect to uncertainty characterization as exogenous disturbance signals. This paper proposes a method to characterize such uncertainties, and a corresponding simple robust MPC scheme within which the characterization can be used. The techniques presented build on an AutoRegressive eXogenous (ARX) model of the plant being controlled, and borrow concepts from invariant set theory. Two control schemes are presented, with one more conservative that the other but less computationally heavy. Numerical simulations are performed, and it is shown that the methods presented can provide robust constraint satisfaction.
 
 \end{abstract}
 
@@ -109,14 +109,19 @@ Model predictive control (MPC) schemes can be used to design controllers for sys
  They are explicit characterizations of the uncertainty present within the model. Such a characterization helps in establishing bounds on the predictions made by the model, such that the real performance of the system lies within these bounds. The robust model predictive controller scheme should ensure constraint satisfaction for all possible predictions of the system evolution within these bounds. A popular approach for this is to use a linear model of the system being controlled, and use a parametric uncertainty description, keeping the parameters of the model within a bounded set $\mathbb{S}$. In \cite{KOTHARE19961361}, approaches to solve MPC problems with such uncertainty descriptions using LMIs are presented. Alternatively, one can use a non-parametric uncertainty description by modeling the uncertainty as an unknown disturbance, lying within a bounded set $\mathbb{W}$. Robust tube-MPC approach is presented in \cite{MAYNE2005219}, which guarantees robust constraint satisfaction for bounded disturbance uncertainty description.
  \\
  \indent
- Using the parametric uncertainty description requires identifying the set $\mathbb{S}$ in which the parameters lie. A review of the methods to do so can be found in \cite{WALTER1990449}. To the best of the authors' knowledge however, no work has been presented to identify the sets $\mathbb{W}$ in which the bounded disturbances lie in case of non-parametric uncertainty description. This work aims to present one such method, along with a simple robust MPC scheme in which this uncertainty description can be employed. The approach uses an ARX model that is identified by performing experiments on the plant, similar to what is done in \cite{7330793} to identify the sets $\mathbb{S}$ of parameter variability. Following the assumption of zero-measurement noise, the main idea is that the uncertainty in the identified model is equivalent to prediction error in ARX identification. Since this prediction error can be extracted out from ARX identification and can be shown to be driven by a noise signal, obtaining the sets in which this noise signal lies is equivalent to identifying the set $\mathbb{W}$ in which the disturbances lie, thus quantifying model uncertainty.
- 
- The robust MPC scheme we present here is based on reference governor approaches, a review of which is presented in \cite{Garone:2017:RCG:3032127.3032157}. The model used by the MPC scheme is obtained from ARX identification of the plant, which 
- 
+ Using the parametric uncertainty description requires identifying the set $\mathbb{S}$ in which the parameters lie. A review of the methods to do so can be found in \cite{WALTER1990449}. To the best of the authors' knowledge however, no work has been presented to identify the sets $\mathbb{W}$ in which the bounded disturbances lie in case of non-parametric uncertainty description. This work aims to present one such method, along with a simple robust MPC scheme in which this uncertainty description can be employed. 
+ \\
+ \indent
+ The approach uses an ARX model that is identified by performing experiments on the plant, similar to what is done in \cite{7330793} to identify the sets $\mathbb{S}$ of parameter variability. Following the assumption of zero-measurement noise, the main idea is that the uncertainty in the identified model is equivalent to prediction error in ARX identification. Since this prediction error can be extracted out from ARX identification and can be shown to be driven by a noise signal, obtaining the sets in which this noise signal lies is equivalent to identifying the set $\mathbb{W}$ in which the disturbances lie, thus quantifying model uncertainty. The methods to calculate this set is based on the theory of output admissible sets, as discussed in \cite{531239}.
+ \noindent
+ The robust MPC scheme within which the ARX model and the corresponding uncertainty description are used is based on reference governor approaches, a review of which is presented in \cite{Garone:2017:RCG:3032127.3032157}. It is noted that the set $\mathbb{W}$ can also be used in other robust MPC schemes accommodating such an uncertainty description.
+ \\
+ \indent
+ The paper is organized as follows. In Section II, the problem we are tacking is introduced, and the open-loop ARX model on which the rest of the work is based in discussed. In Section III, formulation of the robust MPC controller is discussed, explicitly stating where the uncertainty set $\mathbb{W}$ is used within the formulation. Following this, in Section IV, methods to characterize this set $\mathbb{W}$ are presented, which is the main contribution of this work. Numerical simulations are presented in Section V, and conclusions and possible extensions to the work in Section VI.
  
 \section{Problem Statement}
-We consider a \textit{multi-input multi-output} plant $\mathbb{G}_P$, generating an output signal $y(t) \in  \RR^{n_y}$ corresponding to the input signal $y(t) \in\RR^{n_u}, t \in \ZZ^+$. We aim at synthesizing a controller that can make the output track a user-defined reference signal $r(t) \in  \RR^{n_y}$, while robustly respecting the polyhedral constraints $Hy(t) \leq h , t \in \ZZ^+$. Towards this end, we first perform an experiment to identify a model of the plant, the details of which are given in the next section. 
-\section{Open-loop model identification}
+We consider a \textit{multi-input multi-output} plant $\mathbb{G}_P$, generating an output signal $y(t) \in  \RR^{n_y}$ corresponding to the input signal $y(t) \in\RR^{n_u}, t \in \ZZ^+$. We aim at synthesizing a controller that can make the output track a user-defined reference signal $r(t) \in  \RR^{n_y}$, while robustly respecting the polyhedral constraints $Hy(t) \leq h , t \in \ZZ^+$. Towards this end, we first perform an experiment to identify a model of the plant, the details of which are given in the following subsection. 
+\subsection{Open-loop model identification}
 An ARX model of a open-loop dynamical system is identified, which is parameterized as follows:
 \begin{equation*} 
 A(q^{-1})y(t)=B(q^{-1})u(t)+w(t)
