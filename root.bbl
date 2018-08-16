@@ -6,10 +6,40 @@ A.~Bemporad and M.~Morari, ``Robust model predictive control: A survey,'' in
   {\em Robustness in identification and control} (A.~Garulli and A.~Tesi,
   eds.), (London), pp.~207--226, Springer London, 1999.
 
+\bibitem{KOTHARE19961361}
+M.~V. Kothare, V.~Balakrishnan, and M.~Morari, ``Robust constrained model
+  predictive control using linear matrix inequalities,'' {\em Automatica},
+  vol.~32, no.~10, pp.~1361 -- 1379, 1996.
+
 \bibitem{MAYNE2005219}
 D.~Mayne, M.~Seron, and S.~Raković, ``Robust model predictive control of
   constrained linear systems with bounded disturbances,'' {\em Automatica},
   vol.~41, no.~2, pp.~219 -- 224, 2005.
+
+\bibitem{WALTER1990449}
+E.~Walter and H.~Piet-Lahanier, ``Estimation of parameter bounds from
+  bounded-error data: a survey,'' {\em Mathematics and Computers in
+  Simulation}, vol.~32, no.~5, pp.~449 -- 468, 1990.
+
+\bibitem{7330793}
+A.~Mohammadi, M.~Diehl, and M.~Zanon, ``Estimation of uncertain arx models with
+  ellipsoidal parameter variability,'' in {\em 2015 European Control Conference
+  (ECC)}, pp.~1766--1771, July 2015.
+
+\bibitem{Garone:2017:RCG:3032127.3032157}
+E.~Garone, S.~Di~Cairano, and I.~Kolmanovsky, ``Reference and command governors
+  for systems with constraints,'' {\em Automatica}, vol.~75, pp.~306--328, Jan.
+  2017.
+
+\bibitem{doi:10.1002/aic.690490213}
+G.~Pannocchia and J.~B. Rawlings, ``Disturbance models for offset-free
+  model-predictive control,'' {\em AIChE Journal}, vol.~49, no.~2,
+  pp.~426--437.
+
+\bibitem{Predictivecontrol}
+F.~Borrelli, A.~Bemporad, and M.~Morari, {\em Predictive control for linear and
+  hybrid systems}.
+\newblock Cambridge University Press, 2017.
 
 \bibitem{mpt}
 M.~Kvasnica, P.~Grieder, and M.~Baoti\'{c}, ``{Multi-Parametric Toolbox
