@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.1.25)  17 AUG 2018 09:44
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.1.25)  17 AUG 2018 13:02
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1013,10 +1013,10 @@ Overfull \hbox (1.23347pt too wide) detected at line 269
 y \OT1/ztmcm/m/n/10 : []\OML/ztmcm/m/it/10 y \OMS/ztmcm/m/n/10 ^^T []g
  []
 
+[2 <./Drawings/Draw/final_robust.pdf>]
 
 LaTeX Font Warning: Command \small invalid in math mode on input line 301.
 
-[2 <./Drawings/Draw/final_robust.pdf>]
 
 LaTeX Font Warning: Command \small invalid in math mode on input line 308.
 
@@ -1055,12 +1055,13 @@ File: ./Drawings/Draw/Y_D_set-eps-converted-to.pdf Graphic file (type pdf)
 Package pdftex.def Info: ./Drawings/Draw/Y_D_set-eps-converted-to.pdf used on i
 nput line 654.
 (pdftex.def)             Requested size: 163.71048pt x 158.08954pt.
- [4]
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[4]
 
 LaTeX Font Warning: Command \small invalid in math mode on input line 668.
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
 
 Package epstopdf Info: Source file: <./Drawings/Draw/output_performance.eps>
 (epstopdf)                    date: 2018-08-17 08:30:28
@@ -1109,11 +1110,11 @@ LaTeX Warning: There were multiply-defined labels.
 Here is how much of TeX's memory you used:
  25748 strings out of 493029
  624512 string characters out of 6136234
- 802877 words of memory out of 5000000
+ 803877 words of memory out of 5000000
  28731 multiletter control sequences out of 15000+600000
  105095 words of font info for 234 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,22n,84p,1077b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 55i,22n,84p,1162b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist
@@ -1127,7 +1128,7 @@ exlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-di
 st/fonts/type1/urw/times/utmbi8a.pfb></usr/share/texlive/texmf-dist/fonts/type1
 /urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr
 i8a.pfb>
-Output written on root.pdf (6 pages, 214853 bytes).
+Output written on root.pdf (6 pages, 215093 bytes).
 PDF statistics:
  111 PDF objects out of 1000 (max. 8388607)
  78 compressed objects within 1 object stream

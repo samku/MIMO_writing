@@ -96,7 +96,7 @@ Robustified model predictive control through characterization of exogenous distu
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
 
-Robust model predictive control (MPC) techniques require an explicit characterization of the uncertainty within the model employed. Characterization of the uncertainty as parameter variability has been discussed extensively in literature, but little is found with respect to uncertainty characterization as exogenous disturbance signals. This paper proposes a method to characterize such uncertainties, and a corresponding simple robust MPC scheme within which the characterization can be used. The techniques presented build on an AutoRegressive eXogenous (ARX) model of the plant being controlled, and borrow concepts from invariant set theory. Two control schemes are presented, with one more conservative that the other but less computationally heavy. Numerical simulations are performed, and it is shown that the methods presented can provide robust constraint satisfaction.
+Robust model predictive control (MPC) techniques require an explicit characterization of the uncertainty present within the model employed. Characterization of the uncertainty modeled as parameter variability has been discussed extensively in literature, but little is found with respect to characterization when it is modeled as exogenous disturbance signals. This paper proposes a method to do so, and presents a simple robust MPC scheme within which the characterization can be used. The techniques presented build on an AutoRegressive eXogenous (ARX) model of the plant being controlled, and borrow concepts from invariant set theory. Two control schemes are presented, with the second one being more conservative but less computationally heavy that the first. Numerical simulations are performed, and it is shown that the methods presented can provide robust constraint satisfaction.
 
 \end{abstract}
 
@@ -105,22 +105,22 @@ Robust model predictive control (MPC) techniques require an explicit characteriz
 \section{Introduction}
 Model predictive control schemes can be used to design controllers for systems with constraints. The schemes choose control inputs by making predictions of the future evolution of the system. They use a model of the system being controlled to make these predictions. Very often, the model does not represent the system exactly, resulting in the predictions not being accurate. This can result in the system constraints being violated. To avoid this, robust model predictive control schemes have been proposed in literature. A review of the considerations to be made while developing such robust schemes can be found in \cite{10.1007/BFb0109870}.
  \\ \indent
- To improve predictions, the models are appended with uncertainty descriptions.
+ Robust MPC techniques use system models that are appended with uncertainty descriptions.
  They are explicit characterizations of the uncertainty present within the model. Such a characterization helps in establishing bounds on the predictions made by the model, such that the real performance of the system lies within these bounds. The robust model predictive controller scheme should ensure constraint satisfaction for all possible predictions of the system evolution within these bounds. A popular approach for this is to use a linear model of the system being controlled, and use a parametric uncertainty description, keeping the parameters of the model within a bounded set $\mathbb{S}$. In \cite{KOTHARE19961361}, approaches to solve MPC problems with such uncertainty descriptions using LMIs are presented. Alternatively, one can use a non-parametric uncertainty description by modeling the uncertainty as an unknown disturbance, lying within a bounded set $\mathbb{W}$. Robust tube-MPC approach is presented in \cite{MAYNE2005219}, which guarantees robust constraint satisfaction for bounded disturbance uncertainty description.
  \\
  \indent
  Using the parametric uncertainty description requires identifying the set $\mathbb{S}$ in which the parameters lie. A review of the methods to do so can be found in \cite{WALTER1990449}. To the best of the authors' knowledge however, no work has been presented to identify the sets $\mathbb{W}$ in which the bounded disturbances lie in case of non-parametric uncertainty description. This work aims to present one such method, along with a simple robust MPC scheme in which this uncertainty description can be employed. 
  \\
  \indent
- The approach uses an ARX model that is identified by performing experiments on the plant, similar to what is done in \cite{7330793} to identify the sets $\mathbb{S}$ of parameter variability. Following the assumption of zero-measurement noise, the main idea is that the uncertainty in the identified model is equivalent to prediction error in ARX identification. Since this prediction error can be extracted out from ARX identification and can be shown to be driven by a noise signal, obtaining the sets in which this noise signal lies is equivalent to identifying the set $\mathbb{W}$ in which the disturbances lie, thus quantifying model uncertainty. The methods to calculate this set is based on the theory of output admissible sets, as discussed in \cite{531239}.
+ The approach uses an ARX model that is identified by performing experiments on the plant, similar to what is done in \cite{7330793} to identify the sets $\mathbb{S}$ of parameter variability. Following the assumption of zero-measurement noise, the main idea is that the uncertainty in the identified model is equivalent to prediction error in ARX identification. Since this prediction error can be extracted out from ARX identification and can be shown to be driven by a noise signal, obtaining the sets in which this noise signal lies is equivalent to identifying the set $\mathbb{W}$ in which the disturbances lie, thus quantifying model uncertainty. The methods to calculate this set are based on the theory of output admissible sets, as discussed in \cite{531239}.
  \noindent
  The robust MPC scheme within which the ARX model and the corresponding uncertainty description are used is based on reference governor approaches, a review of which is presented in \cite{Garone:2017:RCG:3032127.3032157}. It is noted that the set $\mathbb{W}$ can also be used in other robust MPC schemes accommodating such an uncertainty description.
  \\
  \indent
- The paper is organized as follows. In Section II, the problem we are tacking is introduced, and the open-loop ARX model on which the rest of the work is based in discussed. In Section III, formulation of the robust MPC controller is discussed, explicitly stating where the uncertainty set $\mathbb{W}$ is used within the formulation. Following this, in Section IV, methods to characterize this set $\mathbb{W}$ are presented, which is the main contribution of this work. Numerical simulations are presented in Section V, and conclusions and possible extensions to the work in Section VI.
+ The paper is organized as follows. In Section II, the problem we are tacking is introduced, and the open-loop ARX model on which the rest of the work is based is discussed. In Section III, formulation of the robust MPC controller is discussed, explicitly stating where the uncertainty set $\mathbb{W}$ is used within the formulation. Following this, in Section IV, methods to characterize this set $\mathbb{W}$ are presented, which is the main contribution of this work. Numerical simulations are presented in Section V, and conclusions and possible extensions to the work in Section VI.
  
 \section{Problem Statement}
-We consider a \textit{multi-input multi-output} plant $\mathbb{G}_P$, generating an output signal $y(t) \in  \RR^{n_y}$ corresponding to the input signal $y(t) \in\RR^{n_u}, t \in \ZZ^+$. We aim at synthesizing a controller that can make the output track a user-defined reference signal $r(t) \in  \RR^{n_y}$, while robustly respecting the polyhedral constraints $Hy(t) \leq h , t \in \ZZ^+$. Towards this end, we first perform an experiment to identify a model of the plant, the details of which are given in the following subsection. 
+We consider a \textit{multi-input multi-output} plant $\mathbb{G}_P$, generating an output signal $y(t) \in  \RR^{n_y}$ corresponding to the input signal $u(t) \in\RR^{n_u}, t \in \ZZ^+$. We aim at synthesizing a controller that can make the output track a user-defined reference signal $r(t) \in  \RR^{n_y}$, while robustly respecting the polyhedral constraints $Hy(t) \leq h , t \in \ZZ^+$. Towards this end, we first perform an experiment to identify a model of the plant, the details of which are given in the following subsection. 
 \subsection{Open-loop model identification}
 An ARX model of a open-loop dynamical system is identified, which is parameterized as follows:
 \begin{equation*} 
@@ -131,18 +131,18 @@ For this, the dataset $D_N=\{u(k),y(k);k\in1,2,..,N\}$ obtained from open-loop e
 y(t)=M(q^{-1})u(t)+D(q^{-1})w(t)
 \label{tfmodel}
 \end{equation}
-where the transfer functions are $M(q^{-1})=B(q^{-1})/A(q^{-1})$ and $D(q^{-1})=1/A(q^{-1})$. Hence, the output $y(t)$ is the sum of outputs of two systems, a schematic of which is shown in Fig.\ref{fig:fullloop}.
+where the transfer functions are $M(q^{-1})=B(q^{-1})/A(q^{-1})$ and $D(q^{-1})=1/A(q^{-1})$. Hence, the output $y(t)$ is the sum of outputs of two systems, a schematic of which is shown in Figure \ref{fig:fullloop}.
 	\begin{figure}[h]
 		\vspace{-3pt}
 		\hspace{45pt}
 		\includegraphics[scale = 01.1]{final_robust.pdf}
 		\caption{ARX model}
 		\label{fig:fullloop}
-	\end{figure} 
-If the dataset $D_N$ is noise-free, the part $y_D(t)$ of the output $y(t)$ that the model $M(q^{-1})$ does not capture can be attributed to model uncertainty. Hence, the uncertainty is modeled as an exogenous disturbance signal acting on the output. Robust model-based control schemes can utilize this model for controller synthesis, provided the uncertainty set the exogenous disturbance signal $w(t)$ belongs to is available. In the next section, one such control scheme is discussed. Following that, a method to obtain the set in which $w(t)$ lies is presented. It is noted that using a disturbance model $D(q^{-1})$ for controller synthesis is an approach similar to that followed for offset-free model predictive control, as discussed in \cite{doi:10.1002/aic.690490213}. However, since the focus is on extracting and utilizing the disturbance sets, no analysis of the offset-removing nature of the presented scheme is performed.
+	\end{figure} \\
+If the dataset $D_N$ is noise-free, the part $y_D(t)$ of the output $y(t)$ that the model $M(q^{-1})$ does not capture can be attributed to model uncertainty. Hence, the uncertainty can be modeled as an exogenous disturbance signal acting on the output. Alternatively, we incorporate the disturbance model $D(q^{-1})$ within the complete system model, in which case the uncertainty arises from exogenous disturbance input $w(t)$. Robust model-based control schemes can utilize this appended model for controller synthesis, provided the uncertainty set the exogenous disturbance signal $w(t)$ belongs to is available. In the next section, one such control scheme is discussed. Following that, a method to obtain the set in which $w(t)$ lies is presented. It is noted that using a disturbance model $D(q^{-1})$ for controller synthesis is an approach similar to that followed for offset-free model predictive control, as discussed in \cite{doi:10.1002/aic.690490213}. However, since the focus is on extracting and utilizing the disturbance sets, no analysis of the offset-removing nature of the presented scheme is performed.
   \section{Robust controller design}
   For controller synthesis, we first
-  convert the transfer function in Eq.\eqref{tfmodel} to state space form, and obtain the following equations:
+  convert the transfer functions in \eqref{tfmodel} to state space form, and obtain the following equations:
   \begin{equation} 
   \begin{matrix}
   \begin{bmatrix}
@@ -207,7 +207,7 @@ If the dataset $D_N$ is noise-free, the part $y_D(t)$ of the output $y(t)$ that 
     	\label{full_ONP}
     	\end{equation}
     \end{table*}
-  A robust reference governor can be designed to provide a control input $u(t)$ that makes the output $y(t)$ 
+  A robust controller is designed to provide a control input $u(t)$ that makes the output $y(t)$ 
   track a reference signal $r(t)$. At each time step $t$, the controller solves the optimization problem:
   	\begin{equation}
   	\small
@@ -226,10 +226,10 @@ If the dataset $D_N$ is noise-free, the part $y_D(t)$ of the output $y(t)$ that 
   	\end{aligned}
   	\label{RMPC}
   	\end{equation}
-  It reads the initial state $x(t)$ of the system, and calculates a constant control input $\bar{u}$ which is feasible with respect to the output admissible set $\mathbb{O}_{N_P}$ of the system Eq.\eqref{ssmodel} defined as:
+  It reads the initial state $x(t)$ of the system, and calculates a constant control input $\bar{u}$ which is feasible with respect to the output admissible set $\mathbb{O}_{N_P}$ of the system \eqref{ssmodel} defined as:
   \begin{equation}
   \begin{matrix}
-  \mathbb{O}_{N_P} = \{(x(t),\bar{u}):y\in \mathbb{Y}, u(t+k)=\bar{u},\forall w \in \mathbb{W}  \\ \hspace{150pt} \forall k \in \{1,2,..,N_P\} \}
+  \mathbb{O}_{N_P} = \{(x(t),\bar{u}):y\in \mathbb{Y}, u(t+k)=\bar{u},\forall w \in \mathbb{W}  \\ \hspace{150pt} \forall k \in \{0,1,..,N_P-1\} \}
   \end{matrix}
   \label{O_form}
   \end{equation}
@@ -273,14 +273,14 @@ If the dataset $D_N$ is noise-free, the part $y_D(t)$ of the output $y(t)$ that 
   \mathbb{O}_{N_P}=\bigcap^{N_P}_{k=1} \mathbb{O}_k
   \end{equation*}
   \fi
-  Hence, the definition of set $\mathbb{O}_{N_P}$ in Eq.\eqref{O_form} can be rewritten as:
+  Hence, the definition of set $\mathbb{O}_{N_P}$ in \eqref{O_form} can be rewritten as:
    \begin{equation}
    \begin{matrix}
    \mathbb{O}_{N_P} = \{(x(t),\bar{u}):\tilde{H}y\leq \tilde{h},  u(t+k)=\bar{u},\forall w \in \mathbb{W}  \\ \hspace{150pt} \forall k \in \{1,2,..,N_P\} \}
    \end{matrix}
    \label{O_form}
    \end{equation}
-Using the form in  Eq.\eqref{elongform}, the constraints can be enumerated as shown in Eq.\eqref{full_ONP}. It is written in a simplified notation as:
+Using the form in  \eqref{elongform}, the constraints can be enumerated as shown in \eqref{full_ONP}. It is written in a simplified notation as:
 \begin{equation}
 \mathbb{O}_{N_P}= \begin{Bmatrix}
 (x(t),\bar{u}):
@@ -694,6 +694,6 @@ The output trajectories upon implementation of both the algorithms, and the sche
 \section{Conclusion}
 This paper presents a method to characterize the sets in which model uncertainty described as exogenous disturbances lies, along with a simple robust MPC scheme in which this uncertainty description can be used. The characterization of uncertainty sets builds on ARX identification of the plant, and is based on the premise that the prediction error of the identification process is directly related to model uncertainties. The robust MPC schemes are numerically validated, and were found to provide robust constraint satisfaction. 
 \\
-A number of questions can be researched on from this point. The first is the requirements to be satisfied for Assumption 1 to hold. Following this, analysis of the robust MPC schemes has to be performed. Also, the question when Algorithm \ref{alg:mpc_wLP} could, if it can, outperform the output disturbance formulation in \ref{RMPC_output}. Some investigation into methods that could reduce conservatism of Algorithm \ref{alg:mpc_proj} is also to be done.
+A number of questions are to be researched on from this point. The first is the requirements to be satisfied for Assumption 1 to hold. Following this, analysis of the robust MPC schemes has to be performed. Also, the question when Algorithm \ref{alg:mpc_wLP} could, if it can, outperform the output disturbance formulation in \ref{RMPC_output}. Some investigation into methods that could reduce conservatism of Algorithm \ref{alg:mpc_proj} is also to be done.
 \bibliography{references}. 
 \end{document}
