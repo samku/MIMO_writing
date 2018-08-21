@@ -70,17 +70,17 @@
 \newcommand{\smallmat}[1]{\left[ \begin{smallmatrix}#1 \end{smallmatrix} \right]}
 
 \title{\LARGE \bf
-Robustified model predictive control through characterization of exogenous disturbance uncertainty sets of uncertain ARX models
+Characterization of exogenous disturbance uncertainty sets and their application to robust model predictive control
 }
 
 
-\author{Sampath Kumar Mulagaleti, Alberto Bemporad% <-this % stops a space
+\author{ Sampath Kumar Mulagaleti,  \iffalse Alberto Bemporad \fi % <-this % stops a space
 \thanks{*This work was not supported by any organization}% <-this % stops a space
-\thanks{Sampath Kumar Mulagaleti and Alberto Bemporad are with
+\thanks{\iffalse Sampath Kumar Mulagaleti and Alberto Bemporad are with
 		the IMT School for Advanced Studies Lucca, Piazza San Francesco 19,
 		55100 Lucca, Italy. 
 		 Email: 
-	   {\tt\small \{s.mulagaleti,alberto.bemporad\}@imtlucca.it}}%%
+	   {\tt\small \{s.mulagaleti,alberto.bemporad\}@imtlucca.it} \fi }%%
 }
 
 \bibliographystyle{ieeetr}
@@ -96,7 +96,7 @@ Robustified model predictive control through characterization of exogenous distu
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
 
-Robust model predictive control (MPC) techniques require an explicit characterization of the uncertainty present within the model employed. Characterization of the uncertainty modeled as parameter variability has been discussed extensively in literature, but little is found with respect to characterization when it is modeled as exogenous disturbance signals. This paper proposes a method to do so, and presents a simple robust MPC scheme within which the characterization can be used. The techniques presented build on an AutoRegressive eXogenous (ARX) model of the plant being controlled, and borrow concepts from invariant set theory. Two control schemes are presented, with the second one being more conservative but less computationally heavy that the first. Numerical simulations are performed, and it is shown that the methods presented can provide robust constraint satisfaction.
+Robust model predictive control (MPC) techniques require an explicit characterization of the uncertainty present within the model employed. Characterization of the uncertainty modeled as parameter variability has been discussed extensively in literature, but little is found with respect to characterization of uncertainty modeled as an exogenous disturbance signal. This paper proposes a method to do so, and presents a simple robust MPC scheme within which the characterization can be used. The techniques presented build on an AutoRegressive eXogenous (ARX) model of the plant being controlled, and borrow concepts from invariant set theory. Two control schemes are presented, with the second one being more conservative but less computationally heavy that the first. Numerical simulations are performed, and it is shown that the methods presented can provide robust constraint satisfaction.
 
 \end{abstract}
 
@@ -106,13 +106,13 @@ Robust model predictive control (MPC) techniques require an explicit characteriz
 Model predictive control schemes can be used to design controllers for systems with constraints. The schemes choose control inputs by making predictions of the future evolution of the system. They use a model of the system being controlled to make these predictions. Very often, the model does not represent the system exactly, resulting in the predictions not being accurate. This can result in the system constraints being violated. To avoid this, robust model predictive control schemes have been proposed in literature. A review of the considerations to be made while developing such robust schemes can be found in \cite{10.1007/BFb0109870}.
  \\ \indent
  Robust MPC techniques use system models that are appended with uncertainty descriptions.
- They are explicit characterizations of the uncertainty present within the model. Such a characterization helps in establishing bounds on the predictions made by the model, such that the real performance of the system lies within these bounds. The robust model predictive controller scheme should ensure constraint satisfaction for all possible predictions of the system evolution within these bounds. A popular approach for this is to use a linear model of the system being controlled, and use a parametric uncertainty description, keeping the parameters of the model within a bounded set $\mathbb{S}$. In \cite{KOTHARE19961361}, approaches to solve MPC problems with such uncertainty descriptions using LMIs are presented. Alternatively, one can use a non-parametric uncertainty description by modeling the uncertainty as an unknown disturbance, lying within a bounded set $\mathbb{W}$. Robust tube-MPC approach is presented in \cite{MAYNE2005219}, which guarantees robust constraint satisfaction for bounded disturbance uncertainty description.
+ These are explicit characterizations of the uncertainty present within the model. Such a characterization helps in establishing bounds on the predictions made by the model, such that the real performance of the system lies within these bounds. The robust model predictive controller should ensure constraint satisfaction for all possible predictions of the system evolution within these bounds. A popular approach is to use a linear model of the system being controlled, and use a parametric uncertainty description, keeping the parameters of the model within a bounded set $\mathbb{S}$. In \cite{KOTHARE19961361}, approaches to solve MPC problems with such uncertainty descriptions are presented. Alternatively, one can use a non-parametric uncertainty description by modeling the uncertainty as an unknown disturbance, lying within a bounded set $\mathbb{W}$. Robust tube-MPC approach presented in \cite{MAYNE2005219} guarantees robust constraint satisfaction for such non-parametric uncertainty description.
  \\
  \indent
- Using the parametric uncertainty description requires identifying the set $\mathbb{S}$ in which the parameters lie. A review of the methods to do so can be found in \cite{WALTER1990449}. To the best of the authors' knowledge however, no work has been presented to identify the sets $\mathbb{W}$ in which the bounded disturbances lie in case of non-parametric uncertainty description. This work aims to present one such method, along with a simple robust MPC scheme in which this uncertainty description can be employed. 
+ Using the parametric uncertainty description requires identifying the set $\mathbb{S}$ in which the parameters lie. A review of the methods to do so can be found in \cite{WALTER1990449}. In \cite{7330793}, a method to jointly identify an ARX model of the plant and the set $\mathbb{S}$ in which the model parameters lie is discussed. To the best of the authors' knowledge however, no work has been presented to identify the sets $\mathbb{W}$ in which the bounded disturbances lie in case of non-parametric uncertainty description. This work aims to present one such method, along with a simple robust MPC scheme in which this uncertainty description can be employed. 
  \\
  \indent
- The approach uses an ARX model that is identified by performing experiments on the plant, similar to what is done in \cite{7330793} to identify the sets $\mathbb{S}$ of parameter variability. Following the assumption of zero-measurement noise, the main idea is that the uncertainty in the identified model is equivalent to prediction error in ARX identification. Since this prediction error can be extracted out from ARX identification and can be shown to be driven by a noise signal, obtaining the sets in which this noise signal lies is equivalent to identifying the set $\mathbb{W}$ in which the disturbances lie, thus quantifying model uncertainty. The methods to calculate this set are based on the theory of output admissible sets, as discussed in \cite{531239}.
+ The approach discussed in this work is based on the identification of an ARX model of the plant, and is dependent on the data set used for that identification. Following the assumption of zero-measurement noise, the main idea is that the uncertainty in the identified model is equivalent to prediction error in ARX identification. Since this prediction error can be extracted out from the data set used for ARX identification, and can be shown to be driven by a noise signal, obtaining the sets in which this noise signal lies is equivalent to identifying the set $\mathbb{W}$ in which the disturbances lie, thus characterizing model uncertainty. The methods to calculate this set are based on the theory of output admissible sets, as discussed in \cite{531239}.
  \noindent
  The robust MPC scheme within which the ARX model and the corresponding uncertainty description are used is based on reference governor approaches, a review of which is presented in \cite{Garone:2017:RCG:3032127.3032157}. It is noted that the set $\mathbb{W}$ can also be used in other robust MPC schemes accommodating such an uncertainty description.
  \\
@@ -122,7 +122,7 @@ Model predictive control schemes can be used to design controllers for systems w
 \section{Problem Statement}
 We consider a \textit{multi-input multi-output} plant $\mathbb{G}_P$, generating an output signal $y(t) \in  \RR^{n_y}$ corresponding to the input signal $u(t) \in\RR^{n_u}, t \in \ZZ^+$. We aim at synthesizing a controller that can make the output track a user-defined reference signal $r(t) \in  \RR^{n_y}$, while robustly respecting the polyhedral constraints $Hy(t) \leq h , t \in \ZZ^+$. Towards this end, we first perform an experiment to identify a model of the plant, the details of which are given in the following subsection. 
 \subsection{Open-loop model identification}
-An ARX model of a open-loop dynamical system is identified, which is parameterized as follows:
+An ARX model of the open-loop plant $\mathbb{G}_P$ is identified, which is parameterized as follows:
 \begin{equation*} 
 A(q^{-1})y(t)=B(q^{-1})u(t)+w(t)
 \end{equation*}
@@ -139,7 +139,7 @@ where the transfer functions are $M(q^{-1})=B(q^{-1})/A(q^{-1})$ and $D(q^{-1})=
 		\caption{ARX model}
 		\label{fig:fullloop}
 	\end{figure} \\
-If the dataset $D_N$ is noise-free, the part $y_D(t)$ of the output $y(t)$ that the model $M(q^{-1})$ does not capture can be attributed to model uncertainty. Hence, the uncertainty can be modeled as an exogenous disturbance signal acting on the output. Alternatively, we incorporate the disturbance model $D(q^{-1})$ within the complete system model, in which case the uncertainty arises from exogenous disturbance input $w(t)$. Robust model-based control schemes can utilize this appended model for controller synthesis, provided the uncertainty set the exogenous disturbance signal $w(t)$ belongs to is available. In the next section, one such control scheme is discussed. Following that, a method to obtain the set in which $w(t)$ lies is presented. It is noted that using a disturbance model $D(q^{-1})$ for controller synthesis is an approach similar to that followed for offset-free model predictive control, as discussed in \cite{doi:10.1002/aic.690490213}. However, since the focus is on extracting and utilizing the disturbance sets, no analysis of the offset-removing nature of the presented scheme is performed.
+If the dataset $D_N$ is noise-free, the part $y_D(t)$ of the output $y(t)$ that the model $M(q^{-1})$ does not capture can be attributed to model uncertainty. Hence, the uncertainty can be modeled as an exogenous disturbance signal acting on the output. Instead, we incorporate the disturbance model $D(q^{-1})$ within the complete system model, in which case the uncertainty arises from exogenous disturbance input $w(t)$. Robust model-based control schemes can utilize this appended model for controller synthesis, provided the uncertainty set to which the exogenous disturbance signal $w(t)$ belongs is available. In the next section, one such control scheme is discussed. Following that, a method to obtain the set in which $w(t)$ lies is presented. It is noted that using a disturbance model $D(q^{-1})$ for controller synthesis is an approach similar to that followed for offset-free model predictive control, as discussed in \cite{doi:10.1002/aic.690490213}. However, since the focus is on extracting and utilizing the disturbance sets, no analysis of the offset-removing nature of the presented scheme is performed.
   \section{Robust controller design}
   For controller synthesis, we first
   convert the transfer functions in \eqref{tfmodel} to state space form, and obtain the following equations:
@@ -226,15 +226,15 @@ If the dataset $D_N$ is noise-free, the part $y_D(t)$ of the output $y(t)$ that 
   	\end{aligned}
   	\label{RMPC}
   	\end{equation}
-  It reads the initial state $x(t)$ of the system, and calculates a constant control input $\bar{u}$ which is feasible with respect to the output admissible set $\mathbb{O}_{N_P}$ of the system \eqref{ssmodel} defined as:
+  It reads the current state $x(t)$ of the system, and calculates a constant control input $\bar{u}$ which is feasible with respect to the output admissible set $\mathbb{O}_{N_P}$ of the system \eqref{ssmodel} defined as:
   \begin{equation}
   \begin{matrix}
   \mathbb{O}_{N_P} = \{(x(t),\bar{u}):y\in \mathbb{Y}, u(t+k)=\bar{u},\forall w \in \mathbb{W}  \\ \hspace{150pt} \forall k \in \{0,1,..,N_P-1\} \}
   \end{matrix}
   \label{O_form}
   \end{equation}
-  where $y \in \mathbb{Y}$ denotes the future output sequence $\{y(t+k)\in\mathbb{Y},k=1,..,N_P\}$
-  and $w \in \mathbb{W}$ denotes the future disturbance sequence $\{w(t+k)\in\mathbb{W},k=0,..,N_P\}$.
+  where $y \in \mathbb{Y}$ denotes the future output sequence $\{y(t+k),k=1,..,N_P\}\in\mathbb{Y}$
+  and $w \in \mathbb{W}$ denotes the future disturbance sequence $\{w(t+k),k=0,..,N_P\}\in\mathbb{W}$.
   It is the set of initial states $x(t)$ and a constant control input $\bar{u}$ such that the future output trajectory of the system does not violate the constraints defined by $\mathbb{Y}$ for any possible bounded disturbance sequence $w\in\mathbb{W}$, within the horizon time $N_P$. It can also be seen as an $N_P$-step reachable set from a single point initial state set $\{x(t)\}$ and a constant control input $\bar{u}$, subject to bounded disturbances in $\mathbb{W}$. More details are discussed in \cite{Predictivecontrol}. It is noted that the presented scheme is similar to open-loop min-max robust MPC, except that in the prediction model, disturbances are ignored, and are considered only while calculating input bounds.
   \\
   At any future time instant $t+k$, given the initial state $x(t)$ and a constant control input $\bar{u}$, the output $y(t+k)$ is given by:
@@ -276,7 +276,7 @@ If the dataset $D_N$ is noise-free, the part $y_D(t)$ of the output $y(t)$ that 
   Hence, the definition of set $\mathbb{O}_{N_P}$ in \eqref{O_form} can be rewritten as:
    \begin{equation}
    \begin{matrix}
-   \mathbb{O}_{N_P} = \{(x(t),\bar{u}):\tilde{H}y\leq \tilde{h},  u(t+k)=\bar{u},\forall w \in \mathbb{W}  \\ \hspace{150pt} \forall k \in \{1,2,..,N_P\} \}
+   \mathbb{O}_{N_P} = \{(x(t),\bar{u}):\tilde{H}y\leq \tilde{h},  u(t+k)=\bar{u},\forall w \in \mathbb{W}  \\ \hspace{150pt} \forall k \in \{0,1,..,N_P-1\} \}
    \end{matrix}
    \label{O_form}
    \end{equation}
@@ -298,14 +298,12 @@ w
 \end{equation}
 Since the output feasibility should hold over all possible future disturbance sequences, we desire to calculate the set
 \begin{equation}
-\small
 \mathbb{O}_{N_P}=\{(x(t),\bar{u}): 	H_xx(t) +
-H_u\bar{u}\in \mathbb{Y} \sim D\mathbb{W} \sim .. \sim CA^{t+N_P-1}B\mathbb{W}  \}
+H_u\bar{u}\in \mathbb{Y} \sim H_w\mathbb{W}\}
 \label{Minkowski}
 \end{equation}
 where $\sim$ denotes P-subtraction of sets. Towards this end, we first rewrite \eqref{O_set} as: 
   \begin{equation}
-  \small
   \begin{matrix}
   \hspace{-25pt}
   \mathbb{O}_{N_P}= \begin{Bmatrix}
@@ -339,7 +337,7 @@ where $\sim$ denotes P-subtraction of sets. Towards this end, we first rewrite \
    For polyhedral sets like in our case, performing P-subtractions results in the set:
   \begin{equation}
   \begin{matrix}
-  \mathbb{O}_{N_P} = \{ (x(t),\bar{u}):G_xx(t)+G_u\bar{u})\leq h_{YW} \} \vspace{5pt} \\ 
+  \mathbb{O}_{N_P} = \{ (x(t),\bar{u}):G_xx(t)+G_u\bar{u}\leq h_{YW} \} \vspace{5pt} \\ 
   h_{YW}^i = h_Y^i-\underset{w\in \mathbb{W}}{\text{sup}} G_w^i w
   \end{matrix}
   \label{overall}
@@ -349,7 +347,7 @@ where $\sim$ denotes P-subtraction of sets. Towards this end, we first rewrite \
 Hence, to calculate the set $\mathbb{O}_{N_P}$, we need the disturbance sequence set $\mathbb{W}$. The calculation of this set is discussed in the next section.
   \section{Calculation of $\mathbb{W}$}
   \noindent
-  As discussed earlier, the part $y_D(t)$ of the output $y(t)$ represents uncertainty modeled as an exogenous disturbance input. The signal $y_D(t)$ is generated by the model $D(q^{-1})$, whose state-space equations are written as 
+  As discussed earlier, the part $y_D(t)$ of the output $y(t)$ represents uncertainty modeled as an exogenous disturbance signal. It is generated by the model $D(q^{-1})$, whose state-space equations are written as 
   \begin{equation}
   \begin{matrix}
   x_D(t+1) = A_Dx_D(t)+B_Dw(t)  \\
@@ -361,25 +359,6 @@ Hence, to calculate the set $\mathbb{O}_{N_P}$, we need the disturbance sequence
   \begin{equation}
   U_N=\{y_D(k)=y(k)-M(q^{-1})u(k);k \in 1,2,..,N\}
   \end{equation}
-  \iffalse
-  and the system model as:
-  \begin{equation}
-  \begin{matrix}
-  x_M(k+1) = A_Mx_M(k)+B_Mu(k)  \\
-  y_M(k) = C_Mx_M(k)+D_Mu(k)
-  \end{matrix}
-  \label{ssM}
-  \end{equation}
- {\color{red}{with the initial condition $x_M(0)=0$}}.
- \\
-  \begin{equation}
-  \begin{matrix}
-  x(t+1)=Ax(t)+B_Uu(t)+B_Ww(t) \\
-  y(t)=Cx(t)+D_Uu(t)+D_Ww(t) 
-  \end{matrix} 
-  \label{ssmodel_condensed}
-  \end{equation}
-  \fi
   \begin{table*}[t]
    \begin{equation}
    \mathbb{O}_{N_P}^D=\begin{Bmatrix}(x_D(t),w):\tilde{H}_D\begin{pmatrix}\begin{bmatrix} C_DA_D\\ C_DA_D^2 \\ . \\ . \\ C_DA_D^{N_P}\end{bmatrix}x_D(t) + \begin{bmatrix}
@@ -397,14 +376,16 @@ Hence, to calculate the set $\mathbb{O}_{N_P}$, we need the disturbance sequence
    \label{OND_set}
    \end{equation} 
   \end{table*}
- After collecting N data points of $y_D(k)$, an outer bounding convex polyhedral set $\mathbb{Y}_D^N$ is constructed that encompasses the whole dataset $U_N$. As the number of data points in the experiment increase, we obtain $\mathbb{Y}_D^{N} \subseteq \mathbb{Y}_D^{N+1}$ as
+    From $U_N$, we aim to construct a set in which the corresponding input signal $\{w(k);k \in 1,2,..,N\}$ could lie. It is noted that one cannot just reconstruct the signal $\{w(k);k \in 1,2,..,N\}$ by inverting $D(q^{-1})$, since the initial condition of $D(q^{-1})$ is unknown.
+     Towards this end,
+ first an outer bounding convex polyhedral set $\mathbb{Y}_D^N$ is constructed that encompasses the whole dataset $U_N$. As the number of data points in the experiment increase, we obtain $\mathbb{Y}_D^{N} \subseteq \mathbb{Y}_D^{N+1}$ as
  $\mathbb{Y}_D^{N} = conv(U_N)$ and  $\mathbb{Y}_D^{N+1} = conv(U_{N+1})=conv(U_{N} \cup \{y_D(N+1)\} )$, where $conv(X)$ is the convex hull of the set of elements within $X$. 
  \begin{assumption}
  	 In the limit of infinite data used to build $U_N$, the outer encompassing sets $\mathbb{Y}_D^{N}$ converge to a steady set $\mathbb{Y}_D^{\infty}$.
  \end{assumption} 
-Following assumption 1, $\mathbb{Y}_D^{\infty}$ is the largest set within which every possible exogenous disturbance $y_D(t)$ lies. That is, $y_D(t) \in \mathbb{Y}_D^{\infty} \hspace{2pt}  \forall \ZZ^{+}$.  This is a reasonable assumption if the underlying plant and the identified model are both stable.
+Following Assumption 1, $\mathbb{Y}_D^{\infty}$ is the largest set within which every possible exogenous disturbance $y_D(t)$ lies. That is, $y_D(t) \in \mathbb{Y}_D^{\infty} \hspace{2pt}  \forall \ZZ^{+}$.  This is a reasonable assumption if the underlying plant and the identified model are both stable.
 In a polyhedral form, this set defining the point wise in time values of $y_D(t)$ is written as $\mathbb{Y}_D^{\infty} = \{y_D(t):H_Dy_D(t) \leq h_D \forall t \in \ZZ^+\}$. \\
- Since $y_D(t)$ lies within $\mathbb{Y}_D^{\infty}$ at each time instant $t$, we can define a sequence $y_D \in \mathbb{Y}_D$ starting from time instant $t$ and going $N_P$ time steps into the future $\{y_D(t+k)\in\mathbb{Y}_D,k=1,..,N_P\}$ as:
+ Since $y_D(t)$ lies within $\mathbb{Y}_D^{\infty}$ at each time instant $t$, we can define a sequence $y_D \in \mathbb{Y}_D$ starting from time instant $t$ and going $N_P$ time steps into the future $\{y_D(t+k),k=1,..,N_P\}\in\mathbb{Y}_D$ as:
  \begin{equation}
  \small
  \begin{matrix}
@@ -440,22 +421,22 @@ y_D(t+k)=C_DA_D^{k}x_D(t)+ C_D\sum\limits_{j=0}^{k-1}A_D^jB_Dw(t+k-1-j)+D_Dw(t+k
 Similar to before, we construct a set $\mathbb{O}^D_{N_P}$ defined as:
   \begin{equation}
   \begin{matrix}
-  \mathbb{O}^D_{N_P} = \{(x_D(t),w):y_D\in \mathbb{Y}_D \hspace{10pt} \forall k \in \{1,2,..,N_P\} \}  \\
-    \hspace{32pt} = \{(x_D(t),w):\tilde{H}_Dy_D \leq \tilde{h}_D \hspace{10pt} \forall k \in \{1,2,..,N_P\} \} 
+  \mathbb{O}^D_{N_P} = \{(x_D(t),w):y_D\in \mathbb{Y}_D\}  \\
+    \hspace{32pt} = \{(x_D(t),w):\tilde{H}_Dy_D \leq \tilde{h}_D\} 
   \end{matrix}
   \label{O_D_form}
   \end{equation}
-  This is the set of initial conditions $x_D(t)$ and exogenous disturbance input sequence $\{w(t+k),k \in 0, 1, .., N_P\}$, such that the output of the system \eqref{ssD} always stays inside the set defined by \eqref{YD_set}. This set too is an $N_P$-step reachable set, from a given point $x_D(t)$ and every possible input sequence $w$.
+  This is the set of initial conditions $x_D(t)$ and exogenous disturbance input sequence $w=\{w(t+k),k \in 0, 1, .., N_P\}$, such that the output of the system \eqref{ssD} always stays inside the set defined by \eqref{YD_set}. Like $\mathbb{O}_{N_P}$ this set too is an $N_P$-step reachable set, from a given point $x_D(t)$ and every possible input sequence $w$.
   Using the prediction of the output given by \eqref{expanded_xD} in \eqref{O_D_form}, 
-  the set $\mathbb{O}_{N_P}^D$ can be rewritten as \eqref{OND_set}, which is rewritten in \eqref{condensed_OND} in a condensed form:
+  the set $\mathbb{O}_{N_P}^D$ can be written as \eqref{OND_set}, which is rewritten in \eqref{condensed_OND} in a condensed form:
   \begin{equation}
-  \mathbb{O}_{N_P}^D=\{(x_D(t),w): \tilde{H}_D(H_x^Dx_D(t)+H_ww) \leq \tilde{h}_D\}
+  \mathbb{O}_{N_P}^D=\{(x_D(t),w): \tilde{H}_D(H_x^Dx_D(t)+H_w^Dw) \leq \tilde{h}_D\}
   \label{condensed_OND}
   \end{equation}
   Hence, given an initial condition $x_D(t)=x_D$, we can calculate the set $\mathbb{W}(x_D)$ as:
   \begin{equation}
   \begin{matrix}
-  \mathbb{W}(x_D) = \{w: \tilde{H}_DH_ww \leq \tilde{h}_D-\tilde{H}_DH_x^Dx_D\} \\
+  \mathbb{W}(x_D) = \{w: \tilde{H}_DH_w^Dw \leq \tilde{h}_D-\tilde{H}_DH_x^Dx_D\} \\
   \hspace{-20pt}
    = \{w: Gw \leq g_x(x_D)\}
    \end{matrix}
@@ -467,7 +448,7 @@ Similar to before, we construct a set $\mathbb{O}^D_{N_P}$ defined as:
    \end{assumption}
      \noindent 
   This assumption is reasonable if the size of the set $\mathbb{Y}_D$ is \textit{small} compared to $\mathbb{Y}$, and hence is based on how good the ARX model identification is.\\\indent
-  To calculate the input feasible set $\mathbb{O}_{N_P}$ by solving the equations in \eqref{overall}, we need the initial state $x(t)$ of the system \eqref{ssmodel}. This initial state includes $x_D(t)$. We can use this to first calculate the corresponding disturbance sequence set $\mathbb{W}(x_D)$, and set $\mathbb{W}=\mathbb{W}(x_D)$. Following this, we calculate the set $\mathbb{O}_{N_P}$ as shown in \eqref{overall}. Assuming assumption 2 holds, the MPC scheme \eqref{RMPC} to calculate the optimal control input $\bar{u}$. This procedure is summarized in Algorithm \ref{alg:mpc_wLP}.
+  To calculate the input feasible set $\mathbb{O}_{N_P}$ by solving the equations in \eqref{overall}, we need the initial state $x(t)$ of the system \eqref{ssmodel}. This initial state includes $x_D(t)$. We can use this to first calculate the corresponding disturbance sequence set $\mathbb{W}(x_D)$, and set $\mathbb{W}=\mathbb{W}(x_D)$. Following this, we calculate the set $\mathbb{O}_{N_P}$ as shown in \eqref{overall}. If Assumption 2 holds, the MPC scheme \eqref{RMPC} calculates the optimal control input $\bar{u}$. This procedure is summarized in Algorithm \ref{alg:mpc_wLP}.
    \algblockdefx[Name]{Repeat}{Until}[1][Unknown]{\textbf{Repeat} #1}{\textbf{Until }}
    \begin{algorithm}[t]
    	\caption{Robust MPC scheme}\label{alg:mpc_wLP}
@@ -483,9 +464,9 @@ Similar to before, we construct a set $\mathbb{O}^D_{N_P}$ defined as:
    \end{algorithm}
 \\
 \indent
-  It should be noted that according to Algorithm \ref{alg:mpc_wLP}, at each time step $t$, $n_cN_P$ number of linear programs in \eqref{overall} for the worst case disturbance sequences of $w$ should be solved, before solving the quadratic program \eqref{RMPC}. This online computation might be infeasible in practical applications. In such applications, it is desirable to calculate the sets $\mathbb{W}$ and $\mathbb{O}_{N_P}$ offline. 
+  It should be noted that according to Algorithm \ref{alg:mpc_wLP}, at each time step $t$, $n_cN_P$ number of linear programs in \eqref{overall} for the worst case disturbance sequences of $w$ should be solved, before solving the quadratic program \eqref{RMPC}. This online computation might be very computationally heavy in practical applications. In such applications, it is desirable to calculate the sets $\mathbb{W}$ and $\mathbb{O}_{N_P}$ offline. 
   \\ \indent
-  To calculate these sets offline, we first define the set $\mathbb{X}^D = \{x_D: G^D_xx_D \leq g^D_x\}$. This is the set of all the initial conditions that the disturbance block with state-space model \eqref{ssD} can take. If the state-space model \eqref{ssD} is a non-minimal realization of the I/O model $y_D(t) = D(q^{-1})w(t)$, the state vector $x_D(t)$ at any time instant $t$ is a collection of the previous outputs $y_D(t)$. This is because the model $D(q^{-1})= 1/A(q^{-1})$ means that there is no dependence of current output $y_D(t)$ on past input sequence $\{w(k),k < t\}$. Following assumption 1, if we can build the set $\mathbb{Y}_D^{\infty}$ in which the output $y_D(t)$ can lie at any instant of time $t$, construction of the corresponding set $\mathbb{X}^D$ becomes trivial, and follows along the lines of \eqref{YD_set}. Upon construction of $\mathbb{X}^D$, we can define the disturbance sequence set $\mathbb{W}_{\Omega}$ as:
+  To calculate these sets offline, we first define the set $\mathbb{X}^D = \{x_D: G^D_xx_D \leq g^D_x\}$. This is the set of all the initial states that the disturbance block with state-space model \eqref{ssD} can have. If the state-space model \eqref{ssD} is a non-minimal realization of the I/O model $y_D(t) = D(q^{-1})w(t)$, the state vector $x_D(t)$ at any time instant $t$ is a collection of the previous outputs $y_D(t)$. This is because the model $D(q^{-1})= 1/A(q^{-1})$ means that there is no dependence of current output $y_D(t)$ on past input sequence $\{w(k),k < t\}$. Following Assumption 1, if we can build the set $\mathbb{Y}_D^{\infty}$ in which the output $y_D(t)$ can lie at any instant of time $t$, construction of the corresponding set $\mathbb{X}^D$ becomes trivial, and follows along the lines of \eqref{YD_set}. Upon construction of $\mathbb{X}^D$, we can define the disturbance sequence set $\mathbb{W}_{\Omega}$ as:
   \\
   \begin{equation}
   \begin{matrix}
@@ -494,12 +475,12 @@ Similar to before, we construct a set $\mathbb{O}^D_{N_P}$ defined as:
   \vspace{5pt}
   \\
   \hspace{20pt}
-  =\{w: \exists x_D(t) \in \mathbb{X}^D : \tilde{H}_D(H_x^Dx_D(t)+H_ww) \leq \tilde{h}_D\}
+  =\{w: \exists x_D(t) \in \mathbb{X}^D : \tilde{H}_D(H_x^Dx_D(t)+H_w^Dw) \leq \tilde{h}_D\}
   \end{matrix}
   \label{proj_set}
   \end{equation}
   This is the set in which the input sequence of the $N_P$-step reachable set $\mathbb{O}_{N_P}^D$ must lie such that it is output-admissible with respect to $\mathbb{Y}_D$, given an initial state lying anywhere in the feasible set $\mathbb{X}^D$.
-  By setting $\mathbb{W}=\mathbb{W}_{\Omega}$ in \eqref{overall}, the set $\mathbb{O}_{N_P}$ can be constructed offline. This set can be used to calculate the optimal control input $\bar{u}$ by solving \eqref{RMPC}. These steps are summarized in Algorithm \ref{alg:mpc_proj}.
+  By setting $\mathbb{W}=\mathbb{W}_{\Omega}$ in \eqref{overall}, the set $\mathbb{O}_{N_P}$ can be constructed offline. This set can then be used to calculate the optimal control input $\bar{u}$ by solving \eqref{RMPC}. These steps are summarized in Algorithm \ref{alg:mpc_proj}.
   \algblockdefx[Name]{Repeat}{Until}[1][Unknown]{\textbf{Repeat} #1}{\textbf{Until }}
   \begin{algorithm}[t]
   	\caption{Robust MPC scheme with projected set}\label{alg:mpc_proj}
@@ -647,8 +628,9 @@ with the parameters varying randomly every sampling instant between:
 	\label{Simparam}
 	\vspace{-10pt}  
 \end{table}
+\\
 Experiments are performed to identify a discrete time MIMO-ARX model of the system, by building the dataset $D_N$ with $N=10000$ sampled at $0.1s$. The models $M(q^{-1})$ and $D(q^{-1})$ are computed, as shown in \eqref{tfmodel}, from which non-minimum realization state space models in \eqref{ssmodel} are extracted. A horizon of $N_P=5$ is set in \eqref{RMPC}, and the matrices $G_x$ and $G_u$ in \eqref{overall} are computed, which are required for the calculation of $\mathbb{O}_{N_P}$.
-Then, the dataset $U_N$ of the samples of the signal $y_D(t)$ is constructed. From this dataset, $\mathbb{Y}_D^N$ is extracted, which is the outer bounding polyhedral set of each sample within $U_N$. This is shown in Figure \ref{Y_D^inf}. Instead of a convex hull, a polyhedral approximation of an ellipsoidal set is taken.
+Then, the dataset $U_N$ of the samples of the signal $y_D(t)$ is constructed. From this dataset, $\mathbb{Y}_D^N$ is extracted, which is the outer bounding polyhedral set of each sample within $U_N$. This is shown in Figure \ref{Y_D^inf}. Instead of a convex hull, a polyhedral approximation of an outer ellipsoidal set is taken. 
 	\begin{figure}[h]
 		\hspace{30pt}
 		\includegraphics[scale=0.7]{Y_D_set.eps}
@@ -657,13 +639,13 @@ Then, the dataset $U_N$ of the samples of the signal $y_D(t)$ is constructed. Fr
 	\end{figure} 
 	\vspace{-5pt}
 \\ \indent
-It is assumed that $\mathbb{Y}_D^{\infty}=\mathbb{Y}_D^N$, following which the set $\mathbb{Y}_D$ is calculated. It is the set in which the future sequence $\{y_D(t+k),k \in 1,..,N_P\}$ starting from current time instant $t$ and going $N_P=5$ time-steps into the future lies. This lead to the construction of $\mathbb{O}_{N_P}^D$. This is the set of states $x_D(t)$ and future disturbance input sequence $\{w(t+k),k \in 0,..,N_P\}$, such that the output set $\mathbb{Y}_D$ is respected. The state $x_D(t)$ of the non-minimum realization state-space model \eqref{ssD} is updated using a dead-beat observer at each time-step $t$, and the state $x_M(t)$ is updated only using the dynamics of the model. Thus, we have everything necessary to implement Algorithm \ref{alg:mpc_wLP}.
+It is assumed that $\mathbb{Y}_D^{\infty}=\mathbb{Y}_D^N$, following which the set $\mathbb{Y}_D$ is calculated. It is the set in which the future sequence $\{y_D(t+k),k \in 1,..,N_P\}$ starting from current time instant $t$ and going $N_P=5$ time-steps into the future lies. Using this, the set $\mathbb{O}_{N_P}^D$ is constructed. The state $x_D(t)$ of the non-minimum realization state-space model \eqref{ssD} is updated using a dead-beat observer at each time-step $t$, and the state $x_M(t)$ is updated only using the dynamics of the model. Thus, we have everything necessary to implement Algorithm \ref{alg:mpc_wLP}.
 \\
 \indent
 In-order to implement Algorithm \ref{alg:mpc_proj}, we first need the set $\mathbb{X}^D$ in which the state $x_D(t)$ lies at any time-instant $t$. Since the model \eqref{ssD} is a non-minimum realization, construction of $\mathbb{X}^D$ from $\mathbb{Y}_D^{\infty}$ becomes trivial. After calculating $\mathbb{X}^D$, the set $\mathbb{W}_{\Omega}$ is calculated by projecting $\mathbb{O}_{N_P}^D$ onto the $w$ coordinates. This set-projection operation was performed using the $projection$ function within the multi-parameteric toolbox \cite{mpt}. Following this, we have everything necessary to implement Algorithm \ref{alg:mpc_proj}.
 \\
 \indent
-Alternative to the algorithms presented, one can just use the set $\mathbb{Y}_D$ as output additive disturbance, that is not acting through the model $D(q^{-1})$, and design a robust controller with respect to that set.  For this, the output $y_M(t)$ is desired to track the reference $r(t)$, and is constrained to lie within a reduced set $\tilde{\mathbb{Y}}=\mathbb{Y} \sim \mathbb{Y}_D$. The optimization problem equivalent to \eqref{RMPC} solved by the controller at each time-step $t$ in this case is:
+Alternative to the algorithms presented, one can just use the set $\mathbb{Y}_D$ as output additive disturbance, that is not acting through the model $D(q^{-1})$ but directly on the output $y(t)$, and design a robust controller with respect to that set.  For this, the output $y_M(t)$ is desired to track the reference $r(t)$, and is constrained to lie within a reduced set $\tilde{\mathbb{Y}}=\mathbb{Y} \sim \mathbb{Y}_D$. The optimization problem equivalent to \eqref{RMPC} solved by the controller at each time-step $t$ in this case is:
 \begin{equation}
 \small
 \begin{aligned}
@@ -671,10 +653,10 @@ Alternative to the algorithms presented, one can just use the set $\mathbb{Y}_D$
 &  \hspace{20pt} \mathlarger{\sum\limits_{k=1}^{N_P}}(\hat y_M(t+k)-r(t+k))^2 \\
 \text{subject to}
 %\begin{matrix}
-& \hspace{20pt} \hat{x}(t+k+1)_M = A_M\hat{x}_M(t+k) + B_M\bar{u}\\
+& \hspace{20pt} \hat{x}_M(t+k+1) = A_M\hat{x}_M(t+k) + B_M\bar{u}\\
 & \hspace{20pt} \hat y_M(t+k) = C_M\hat{x}_M(t+k) + D_M\bar{u} \\
 & \hspace{20pt} \hat{x}_M(t)=x_M(t) \\
-& \hspace{20pt} \hat{y}_M(t+k)\in \tilde{\mathbb{Y}},k=1,..,N_P
+& \hspace{20pt} \{\hat{y}_M(t+k),k=1,..,N_P\} \in \tilde{\mathbb{Y}}
 %	& \hspace{20pt} Hy_{\gamma}(t) \leq h \mbox{\AB{I think $Hy_{\gamma}(t)\leq h$ is redundant}}\\
 %	& \hspace{20pt}  g(t+k) \in \mathbb{G}_{N_P}(\gamma(t)) \\
 %\end{matrix}
@@ -694,6 +676,6 @@ The output trajectories upon implementation of both the algorithms, and the sche
 \section{Conclusion}
 This paper presents a method to characterize the sets in which model uncertainty described as exogenous disturbances lies, along with a simple robust MPC scheme in which this uncertainty description can be used. The characterization of uncertainty sets builds on ARX identification of the plant, and is based on the premise that the prediction error of the identification process is directly related to model uncertainties. The robust MPC schemes are numerically validated, and were found to provide robust constraint satisfaction. 
 \\
-A number of questions are to be researched on from this point. The first is the requirements to be satisfied for Assumption 1 to hold. Following this, analysis of the robust MPC schemes has to be performed. Also, the question when Algorithm \ref{alg:mpc_wLP} could, if it can, outperform the output disturbance formulation in \ref{RMPC_output}. Some investigation into methods that could reduce conservatism of Algorithm \ref{alg:mpc_proj} is also to be done.
+A number of questions are to be researched on from this point. The first is the requirements to be satisfied for Assumption 1 to hold. Following this, analysis of the robust MPC schemes has to be performed. Also, the conditions when Algorithm \ref{alg:mpc_wLP} could, if it can, outperform the output disturbance formulation in \eqref{RMPC_output} should be analyzed. Some investigation into methods that could reduce conservatism of Algorithm \ref{alg:mpc_proj} is also to be done. Also, extensions are to be done to the methodology in cases when plant models other than ARX models are used.
 \bibliography{references}. 
 \end{document}
