@@ -74,13 +74,13 @@ Characterization of exogenous disturbance uncertainty sets and their application
 }
 
 
-\author{ Sampath Kumar Mulagaleti,  \iffalse Alberto Bemporad \fi % <-this % stops a space
+\author{ Sampath Kumar Mulagaleti, Alberto Bemporad % <-this % stops a space
 \thanks{*This work was not supported by any organization}% <-this % stops a space
-\thanks{\iffalse Sampath Kumar Mulagaleti and Alberto Bemporad are with
+\thanks{Sampath Kumar Mulagaleti and Alberto Bemporad are with
 		the IMT School for Advanced Studies Lucca, Piazza San Francesco 19,
 		55100 Lucca, Italy. 
 		 Email: 
-	   {\tt\small \{s.mulagaleti,alberto.bemporad\}@imtlucca.it} \fi }%%
+	   {\tt\small \{s.mulagaleti,alberto.bemporad\}@imtlucca.it}  }%%
 }
 
 \bibliographystyle{ieeetr}
@@ -96,7 +96,7 @@ Characterization of exogenous disturbance uncertainty sets and their application
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
 
-Robust model predictive control (MPC) techniques require an explicit characterization of the uncertainty present within the model employed. Characterization of the uncertainty modeled as parameter variability has been discussed extensively in literature, but little is found with respect to characterization of uncertainty modeled as an exogenous disturbance signal. This paper proposes a method to do so, and presents a simple robust MPC scheme within which the characterization can be used. The techniques presented build on an AutoRegressive eXogenous (ARX) model of the plant being controlled, and borrow concepts from invariant set theory. Two control schemes are presented, with the second one being more conservative but less computationally heavy that the first. Numerical simulations are performed, and it is shown that the methods presented can provide robust constraint satisfaction.
+Robust model predictive control (MPC) techniques require an explicit characterization of the uncertainty present within the model employed. Characterization of the uncertainty modeled as parameter variability has been discussed extensively in literature, but little is found with respect to characterization of uncertainty modeled as an exogenous disturbance signal. This paper proposes a method to do so, and presents a simple robust MPC scheme within which the characterization can be used. The techniques presented build on an AutoRegressive eXogenous (ARX) model of the plant being controlled, and borrow concepts from invariant set theory. Two control schemes are presented, with the second one being more conservative but less computationally heavy than the first. Numerical simulations are performed, and it is shown that the methods presented can provide robust constraint satisfaction and reduced conservatism in performance.
 
 \end{abstract}
 
@@ -510,7 +510,7 @@ Similar to before, we construct a set $\mathbb{O}^D_{N_P}$ defined as:
   \iffalse
   This conservativeness arises because on propagating the system \eqref{expanded_xD} with initial condition $x_D(t) \in \mathbb{X}^D$, the corresponding output sequence set is $y_D \in \mathbb{Y}_D^{\Omega}  \supseteq  \mathbb{Y}_D$. 
   \fi
-  In the next section, these two algorithms are simulated and compared, with the plant $\mathbb{G}_P$ being a 2-input 2-output linear system with parameters varying randomly.
+  In the next section, the presented methods are implemented and compared.
   \iffalse
  {\color{blue}{Ideas: Say first N data points are collected. An outer bounding polyhedral set $\mathbb{Y}^D_N$ is calculated, that encompasses all the points in $U_N$. Now, every point in $U_N$ lies in this set. As the number of data points increase, we will obtain for sure $\mathbb{Y}^D_{N} \subseteq \mathbb{Y}^D_{N+1}$. Assuming we have infinite data, we have the largest set $\mathbb{Y}^D_{\infty}$ in which every possible $y_D(t)$ will lie. Let $\mathbb{Y}_{\infty}^D$ be a polyhedron $H_Dy_D(t) \leq h_D$. Then, starting at a timestep $t$, if we define $y_D \in \mathbb{Y}_D$ as the sequence $\{y_D(t+k)\in\mathbb{Y}_D,k=1,..,N_P\}$, we can write the set $\mathbb{Y}_D$ as:
  		  \begin{equation*}
@@ -562,6 +562,8 @@ Have to write a theorem that projection is a good idea : The obtained set is lar
     
     \fi
 \section{Numerical simulations}
+Two numerical examples are presented. In the first one, the plant $\mathbb{G}_P$ is a 2-input 2-output linear system with randomly varying parameters. The presented algorithms are implemented and constraint satisfaction is demonstrated.  In the second example, $\mathbb{G}_P$ represents a discrete time 2-input 2-output non-linear plant. The uncertainty sets are extracted according to the methods presented, and are used in a robust open-loop minmax MPC controllers. The improvement in performance on using the disturbance model $D(q^{-1})$, as opposed to considering uncertainty only as an output noise is demonstrated, thus providing an argument to prefer using the uncertainty sets on $w(t)$ over $y_D(t)$. The controllers are implemented using YALMIP \cite{Lofberg2004}, using its robust optimization framework.
+\subsection{Linear parameter varying plant}
 Numerical simulations are performed on the following uncertain linear system to evaluate the approaches mentioned:
 \iffalse
 \begin{equation}
@@ -643,6 +645,7 @@ It is assumed that $\mathbb{Y}_D^{\infty}=\mathbb{Y}_D^N$, following which the s
 \\
 \indent
 In-order to implement Algorithm \ref{alg:mpc_proj}, we first need the set $\mathbb{X}^D$ in which the state $x_D(t)$ lies at any time-instant $t$. Since the model \eqref{ssD} is a non-minimum realization, construction of $\mathbb{X}^D$ from $\mathbb{Y}_D^{\infty}$ becomes trivial. After calculating $\mathbb{X}^D$, the set $\mathbb{W}_{\Omega}$ is calculated by projecting $\mathbb{O}_{N_P}^D$ onto the $w$ coordinates. This set-projection operation was performed using the $projection$ function within the multi-parameteric toolbox \cite{mpt}. Following this, we have everything necessary to implement Algorithm \ref{alg:mpc_proj}.
+\iffalse
 \\
 \indent
 Alternative to the algorithms presented, one can just use the set $\mathbb{Y}_D$ as output additive disturbance, that is not acting through the model $D(q^{-1})$ but directly on the output $y(t)$, and design a robust controller with respect to that set.  For this, the output $y_M(t)$ is desired to track the reference $r(t)$, and is constrained to lie within a reduced set $\tilde{\mathbb{Y}}=\mathbb{Y} \sim \mathbb{Y}_D$. The optimization problem equivalent to \eqref{RMPC} solved by the controller at each time-step $t$ in this case is:
@@ -665,17 +668,88 @@ Alternative to the algorithms presented, one can just use the set $\mathbb{Y}_D$
 \end{equation}
 If the state-space model of $M(q^{-1})$ is a non-minimum realization,
 the state $x_M(t)$ is updated using a deadbeat observer, which places the past plant outputs $y(t)$ in a column vector.
+\fi
 	\begin{figure}[h]
 		\vspace{-3pt}
 		\hspace{5pt}
-		\includegraphics[scale=0.75]{output_performance.eps}
+		\includegraphics[scale=0.8]{output_performance.eps}
 		\caption{Comparison of plant output trajectories. Gray area is the output constraint set $\mathbb{Y}$.}
 		\label{fig:y_trajectories}
-	\end{figure} \\
-The output trajectories upon implementation of both the algorithms, and the scheme for output disturbance presented in \eqref{RMPC_output} are compared in Figure \ref{fig:y_trajectories}. It can be seen that in all three cases, the trajectories remain within the constraint set $\mathbb{Y}$. As stated in Proposition 1, it can be seen that the output trajectory resulting from Algorithm \ref{alg:mpc_proj} is conservative with respect to the constraint set as compared to Algorithm \ref{alg:mpc_wLP}. However, the performance of Algorithm \ref{alg:mpc_wLP} and \eqref{RMPC_output} seem to be comparable to each other. Since Algorithm \ref{alg:mpc_wLP} is computationally heavy as it requires solving the linear programs in \eqref{overall}, it remains to be investigated when it could outperform the output disturbance formulation of \eqref{RMPC_output}.
+	\end{figure} 
+
+The output trajectories upon implementation of both the algorithms are compared in Figure \ref{fig:y_trajectories}. It can be seen that in both the cases, the trajectories remain within the constraint set $\mathbb{Y}$. As stated in Proposition 1, it can be seen that the output trajectory resulting from Algorithm \ref{alg:mpc_proj} is conservative with respect to the constraint set as compared to Algorithm \ref{alg:mpc_wLP}. 
+\subsection{Non-linear plant}
+A MIMO discrete time non-linear plant $\mathbb{G}_P$ described by the following non-linear equations is considered:
+\begin{equation}
+\small
+\begin{matrix}
+y_1(t) = 0.1y_1(t-1)-0.1y_2(t-1)+u_1(t-1)\\\hspace{30pt}-u_2(t-1)+0.01y_1(t-1)u_2(t-1) \\ \vspace{-5pt}\\
+y_2(t) = 0.1y_2(t-1)-0.1y_1(t-1)+u_1(t-1)\\\hspace{30pt} +u_2(t-1)-0.02y_2(t-1)u_1(t-1) \\
+\end{matrix}
+\end{equation}
+Similar to the first example, datasets $D_N$ and $U_N$ are constructed, and corresponding disturbance sets $\mathbb{Y}_D$, $\mathbb{W}(x_D(t))$ and $\mathbb{W}_\Omega$ are extracted. As opposed to the first example however, the  open-loop minmax robust MPC formulation as presented in \cite{Lofberg:2003} is implemented, and is shown in \eqref{RMPC_W_minmax}:
+\begin{equation}
+\small
+\begin{matrix}
+\begin{aligned}
+\underset{u(t+k),k=0,..,N_P}{\text{min}} \hspace{5pt} \underset{w(t+k),k=0,..,N_P}{\text{max}}
+&  \hspace{10pt} \mathlarger{\sum\limits_{k=1}^{N_P}}\norm{\hat y(t+k)-r(t+k)}_1 \\ \hspace{-200pt}
+\end{aligned} \vspace{-10pt}\\
+\begin{aligned}
+\text{subject to}
+%\begin{matrix}
+& \hspace{5pt} \hat{x}(t+k+1) = A\hat{x}(t+k) + B_Uu(t+k)+B_Ww(t+k)\\
+& \hspace{5pt} \hat{y}(t+k) = C\hat{x}(t+k) + D_Uu(t+k)+D_Ww(t+k) \\
+& \hspace{5pt} \hat{x}(t)=x(t) \\
+& \hspace{5pt} \{\hat{y}(t+k),k=1,..,N_P\} \in \mathbb{Y} \\
+& \hspace{5pt} \{w(t+k),k=0,..,N_P\} \in \mathbb{W}
+%	& \hspace{20pt} Hy_{\gamma}(t) \leq h \mbox{\AB{I think $Hy_{\gamma}(t)\leq h$ is redundant}}\\
+%	& \hspace{20pt}  g(t+k) \in \mathbb{G}_{N_P}(\gamma(t)) \\
+%\end{matrix}
+\end{aligned}
+\end{matrix}
+\label{RMPC_W_minmax}
+\end{equation}
+At each time step $t$, the state $x(t)$ is read, and either $\mathbb{W}=\mathbb{W}(x_D(t))$ or $\mathbb{W}=\mathbb{W}_{\Omega}$ is set. In the first case, before solving \eqref{RMPC_W_minmax}, some simple matrix-vector operations are to performed to calculate $\mathbb{W}(x_D(t))$ at each step. \\
+To demonstrate the use of an appended disturbance model to improve the performance of robust MPC, the minmax MPC controller in \eqref{RMPC_YD_minmax} is implemented. For this controller, the uncertainty is modeled as simple output disturbance $y_D(t)$ constrained to lie within the set $\mathbb{Y}_D$. The matrix $D_Y=eye(ny)$, indicating that each output channel has a disturbance signal added to it.
+\\
+\begin{equation}
+\small
+\begin{matrix}
+\begin{aligned}
+\underset{u(t+k),k=0,..,N_P}{\text{min}} \hspace{5pt} \underset{y_D(t+k),k=0,..,N_P}{\text{max}}
+&  \hspace{10pt} \mathlarger{\sum\limits_{k=1}^{N_P}}\norm{\hat y(t+k)-r(t+k)}_1 \\ \hspace{-200pt}
+\end{aligned} \vspace{-10pt}\\
+\begin{aligned}
+\text{subject to}
+%\begin{matrix}
+& \hspace{5pt} \hat{x}_M(t+k+1) = A_M\hat{x}_M(t+k) + B_Mu(t+k)\\
+& \hspace{5pt} \hat{y}(t+k) = C_M\hat{x}_M(t+k) + D_Mu(t+k)+D_Yy_D(t+k) \\
+& \hspace{5pt} \hat{x}_M(t)=x_M(t) \\
+& \hspace{5pt} \{\hat{y}(t+k),k=1,..,N_P\} \in \mathbb{Y} \\
+& \hspace{5pt} \{y_D(t+k),k=0,..,N_P\} \in \mathbb{Y}_D
+%	& \hspace{20pt} Hy_{\gamma}(t) \leq h \mbox{\AB{I think $Hy_{\gamma}(t)\leq h$ is redundant}}\\
+%	& \hspace{20pt}  g(t+k) \in \mathbb{G}_{N_P}(\gamma(t)) \\
+%\end{matrix}
+\end{aligned}
+\end{matrix}
+\label{RMPC_YD_minmax}
+\end{equation}
+Since the matrices $A_M,B_M,C_M,D_M$ represent a non-minimal state space model of the $M(q^{-1})$, the state $x_M(t)$ of the model is updated using a deadbeat observer. This observer places the past plant outputs $\{y(k),k<t\}$ and inputs $\{u(k),k<t\}$ in a vector composing the system state. \\
+ The output constraint set $\mathbb{Y}$ is composed of:
+ \begin{equation}
+ \small
+ \mathbb{Y}=\begin{Bmatrix}y(t+k):\begin{bmatrix} 1 & 0 \\ 0 & 1 \\ -1 & 0 \\ 0 & -1 \end{bmatrix} y(t+k) \leq \begin{bmatrix} 0.5 \\ 0.5 \\ 0.5 \\ 0.5 \end{bmatrix}, k=1,..,N_P\end{Bmatrix}
+ \end{equation}
+and the output $y(t)$ of the plant should track the constant reference $r(t)=\begin{bmatrix} 0.5 & -0.5 \end{bmatrix} '$. A comparison of the performance of the different uncertainty descriptions in shown in Figure \ref{minmaxMPC}. It is clearly seen that using $\mathbb{W}(x_D(t))$ results in the least conservative performance, indicating that using a disturbance model improves robust MPC performance.
+\begin{figure}[h]
+	\centering
+\includegraphics[scale=0.85]{mimax_full.eps}
+\caption{Performance comparison on using the three different uncertainty descriptions in minmax-MPC}
+\label{minmaxMPC}
+\end{figure}
 \section{Conclusion}
 This paper presents a method to characterize the sets in which model uncertainty described as exogenous disturbances lies, along with a simple robust MPC scheme in which this uncertainty description can be used. The characterization of uncertainty sets builds on ARX identification of the plant, and is based on the premise that the prediction error of the identification process is directly related to model uncertainties. The robust MPC schemes are numerically validated, and were found to provide robust constraint satisfaction. 
-\\
-A number of questions are to be researched on from this point. The first is the requirements to be satisfied for Assumption 1 to hold. Following this, analysis of the robust MPC schemes has to be performed. Also, the conditions when Algorithm \ref{alg:mpc_wLP} could, if it can, outperform the output disturbance formulation in \eqref{RMPC_output} should be analyzed. Some investigation into methods that could reduce conservatism of Algorithm \ref{alg:mpc_proj} is also to be done. Also, extensions are to be done to the methodology in cases when plant models other than ARX models are used.
+A number of questions are to be researched on from this point. The first is the requirements to be satisfied for Assumption 1 to hold. Following this, analysis of the robust MPC schemes has to be performed. Some investigation into methods that could reduce conservatism of Algorithm \ref{alg:mpc_proj} is also to be done. Also, extensions are to be done to the methodology in cases when plant models other than ARX models are used.
 \bibliography{references}. 
 \end{document}

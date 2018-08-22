@@ -4,45 +4,45 @@ The top-level auxiliary file: root.aux
 The style file: ieeetr.bst
 Database file #1: references.bib
 Warning--empty year in doi:10.1002/aic.690490213
-You've used 10 entries,
+You've used 12 entries,
             1876 wiz_defined-function locations,
-            548 strings with 5258 characters,
-and the built_in function-call counts, 3381 in all, are:
-= -- 344
-> -- 106
+            562 strings with 5573 characters,
+and the built_in function-call counts, 3914 in all, are:
+= -- 397
+> -- 114
 < -- 0
-+ -- 38
-- -- 28
-* -- 238
-:= -- 442
-add.period$ -- 11
-call.type$ -- 10
-change.case$ -- 9
++ -- 42
+- -- 30
+* -- 272
+:= -- 507
+add.period$ -- 13
+call.type$ -- 12
+change.case$ -- 11
 chr.to.int$ -- 0
-cite$ -- 11
-duplicate$ -- 171
-empty$ -- 323
-format.name$ -- 28
-if$ -- 847
+cite$ -- 13
+duplicate$ -- 207
+empty$ -- 387
+format.name$ -- 30
+if$ -- 981
 int.to.chr$ -- 0
-int.to.str$ -- 10
-missing$ -- 10
-newline$ -- 35
-num.names$ -- 12
-pop$ -- 37
+int.to.str$ -- 12
+missing$ -- 12
+newline$ -- 41
+num.names$ -- 14
+pop$ -- 50
 preamble$ -- 2
 purify$ -- 0
 quote$ -- 0
-skip$ -- 142
+skip$ -- 162
 stack$ -- 0
-substring$ -- 298
-swap$ -- 85
+substring$ -- 338
+swap$ -- 97
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 1
-while$ -- 29
-width$ -- 12
-write$ -- 102
+while$ -- 34
+width$ -- 14
+write$ -- 121
 (There was 1 warning)

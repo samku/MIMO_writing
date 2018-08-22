@@ -47,8 +47,18 @@ F.~Borrelli, A.~Bemporad, and M.~Morari, {\em Predictive control for linear and
   hybrid systems}.
 \newblock Cambridge University Press, 2017.
 
+\bibitem{Lofberg2004}
+J.~L{\"{o}}fberg, ``Yalmip : A toolbox for modeling and optimization in
+  matlab,'' in {\em In Proceedings of the CACSD Conference}, (Taipei, Taiwan),
+  2004.
+
 \bibitem{mpt}
 M.~Kvasnica, P.~Grieder, and M.~Baoti\'{c}, ``{Multi-Parametric Toolbox
   (MPT)},'' 2004.
+
+\bibitem{Lofberg:2003}
+J.~L{\"{o}}fberg, ``Approximations of closed-loop mpc,'' in {\em Proceedings of
+  the 42nd IEEE Conference on Decision and Control}, (Maui, Hawaii),
+  pp.~1438--1442, 2003.
 
 \end{thebibliography}
