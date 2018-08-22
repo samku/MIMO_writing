@@ -74,13 +74,13 @@ Characterization of exogenous disturbance uncertainty sets and their application
 }
 
 
-\author{ Sampath Kumar Mulagaleti, Alberto Bemporad % <-this % stops a space
+\author{ Sampath Kumar Mulagaleti, Alberto Bemporad and Mario Zanon % <-this % stops a space
 \thanks{*This work was not supported by any organization}% <-this % stops a space
-\thanks{Sampath Kumar Mulagaleti and Alberto Bemporad are with
+\thanks{Sampath Kumar Mulagaleti, Alberto Bemporad and Mario Zanon are with
 		the IMT School for Advanced Studies Lucca, Piazza San Francesco 19,
 		55100 Lucca, Italy. 
 		 Email: 
-	   {\tt\small \{s.mulagaleti,alberto.bemporad\}@imtlucca.it}  }%%
+	   {\tt\tiny \{s.mulagaleti,alberto.bemporad,mario.zanon\}@imtlucca.it}  }%%
 }
 
 \bibliographystyle{ieeetr}
@@ -453,11 +453,11 @@ Similar to before, we construct a set $\mathbb{O}^D_{N_P}$ defined as:
   This is the largest set in which the disturbance input sequence $\{w(t+k),k \in 0,1,..,N_P\}$ can lie in, such that the corresponding output sequence $\{y_D(t+k),k \in 1,..,N_P\}$ always lies within \eqref{YD_set}. In other words, it is the set in which the input sequence of the $N_P$-step reachable set $\mathbb{O}_{N_P}^D$ must lie such that it is output-admissible with respect to $\mathbb{Y}_D$, given an initial state point $x_D(t)$.
    \begin{assumption}
    The set $\mathbb{O}_{N_P}$ as defined in \eqref{Minkowski} is non-empty for $\mathbb{W}=\mathbb{W}(x_D(t))$ for all possible $x_D(t)$.
-   \label{Assmp_nonEmpty}
+   \label{assmp_nonEmpty}
    \end{assumption}
      \noindent 
   This assumption is reasonable if the size of the set $\mathbb{Y}_D$ is \textit{small} compared to $\mathbb{Y}$, and hence is based on how good the ARX model identification is.\\\indent
-  To calculate the input feasible set $\mathbb{O}_{N_P}$ by solving the equations in \eqref{overall}, we need the initial state $x(t)$ of the system \eqref{ssmodel}, which includes $x_D(t)$. We can use this to first calculate the corresponding disturbance sequence set $\mathbb{W}(x_D)$, and set $\mathbb{W}=\mathbb{W}(x_D)$. Following this, we calculate the set $\mathbb{O}_{N_P}$ as shown in \eqref{overall}. If Assumption \ref{Assmp_nonEmpty} holds, the MPC scheme \eqref{RMPC} calculates the optimal control input $\bar{u}$. This procedure is summarized in Algorithm \ref{alg:mpc_wLP}.
+  To calculate the input feasible set $\mathbb{O}_{N_P}$ by solving the equations in \eqref{overall}, we need the initial state $x(t)$ of the system \eqref{ssmodel}, which includes $x_D(t)$. We can use this to first calculate the corresponding disturbance sequence set $\mathbb{W}(x_D)$, and set $\mathbb{W}=\mathbb{W}(x_D)$. Following this, we calculate the set $\mathbb{O}_{N_P}$ as shown in \eqref{overall}. If Assumption \ref{assmp_nonEmpty} holds, the MPC scheme \eqref{RMPC} calculates the optimal control input $\bar{u}$. This procedure is summarized in Algorithm \ref{alg:mpc_wLP}.
    \algblockdefx[Name]{Repeat}{Until}[1][Unknown]{\textbf{Repeat} #1}{\textbf{Until }}
    \begin{algorithm}[t]
    	\caption{Robust MPC scheme}\label{alg:mpc_wLP}
@@ -473,9 +473,9 @@ Similar to before, we construct a set $\mathbb{O}^D_{N_P}$ defined as:
    \end{algorithm}
 \\
 \indent
-  It should be noted that according to Algorithm \ref{alg:mpc_wLP}, at each time step $t$, $n_cN_P$ number of linear programs in \eqref{overall} for the worst case disturbance sequences of $w$ should be solved, before solving the quadratic program \eqref{RMPC}. This online computation might be very computationally heavy in practical applications. In such applications, it is desirable to calculate the sets $\mathbb{W}$ and $\mathbb{O}_{N_P}$ offline. 
+  It should be noted that according to Algorithm \ref{alg:mpc_wLP}, at each time step $t$, $n_cN_P$ linear programs in \eqref{overall} should be solved for the worst case disturbance sequences of $w$, before solving the quadratic program \eqref{RMPC}. To reduce this online computation, it is desirable to calculate the sets $\mathbb{W}$ and $\mathbb{O}_{N_P}$ offline. 
   \\ \indent
-  To calculate these sets offline, we first define the set $\mathbb{X}^D = \{x_D: G^D_xx_D \leq g^D_x\}$. This is the set of all the initial states that the disturbance block with state-space model \eqref{ssD} can have. If the state-space model \eqref{ssD} is a non-minimal realization of the I/O model $y_D(t) = D(q^{-1})w(t)$, the state vector $x_D(t)$ at any time instant $t$ is a collection of the previous outputs $y_D(t)$. This is because the model $D(q^{-1})= 1/A(q^{-1})$ means that there is no dependence of current output $y_D(t)$ on past input sequence $\{w(k),k < t\}$. Following Assumption 1, if we can build the set $\mathbb{Y}_D^{\infty}$ in which the output $y_D(t)$ can lie at any instant of time $t$, construction of the corresponding set $\mathbb{X}^D$ becomes trivial, and follows along the lines of \eqref{YD_set}. Upon construction of $\mathbb{X}^D$, we can define the disturbance sequence set $\mathbb{W}_{\Omega}$ as:
+  To calculate these sets offline, we first define the set $\mathbb{X}^D = \{x_D: G^D_xx_D \leq g^D_x\}$. This is the set of all the initial states that the disturbance block with state-space model \eqref{ssD} can have. If the state-space model \eqref{ssD} is a non-minimal realization of the I/O model $y_D(t) = D(q^{-1})w(t)$, the state vector $x_D(t)$ at any time instant $t$ is a collection of the previous outputs $y_D(t)$. This is because the model $D(q^{-1})= 1/A(q^{-1})$ means that there is no dependence of current output $y_D(t)$ on past input sequence $\{w(k),k < t\}$. Following Assumption \ref{assmp_inf}, if we can build the set $\mathbb{Y}_D^{\infty}$ in which the output $y_D(t)$ can lie at any instant of time $t$, construction of the corresponding set $\mathbb{X}^D$ becomes trivial. If the number of past outputs present in the state is the same for all output channels, $\mathbb{X}^D$ is constructed as an enumeration of $\mathbb{Y}_D^{\infty}$. Else, a feasibility problem is solved for the missing parts of the past outputs. Upon construction of $\mathbb{X}^D$, we can define the disturbance sequence set $\mathbb{W}_{\Omega}$ as:
   \\
   \begin{equation}
   \begin{matrix}
@@ -509,17 +509,17 @@ Similar to before, we construct a set $\mathbb{O}^D_{N_P}$ defined as:
   \end{proposition}
 \hspace{4pt}
   \textit{Proof:}
-  Let $\mathbb{O}_{N_P}^1$ and $\mathbb{O}_{N_P}^2$ be the two polyhedral sets constructed in Algorithm \ref{alg:mpc_wLP} and Algorithm \ref{alg:mpc_proj} respectively.
+  Let $\mathbb{O}_{N_P}^1$ and $\mathbb{O}_{N_P}^2$ be the two polyhedral sets constructed in Algorithm \ref{alg:mpc_wLP} and Algorithm \ref{alg:mpc_proj} respectively. If Assumption \ref{assmp_nonEmpty} holds, the set $\mathbb{O}_{N_P}^2$ is non-empty.
   By construction, $\mathbb{W}(x_D(t)) \subseteq \mathbb{W}_{\Omega} \hspace{2pt} \forall x_D(t) \in \mathbb{X}^D$. This means that in \eqref{overall}, 
   \begin{equation}
   \underset{w\in \mathbb{W}(x_D(t))}{\text{sup}} G_w^i w \leq  \underset{w\in \mathbb{W}_{\Omega}}{\text{sup}} G_w^i w \hspace{10pt} \forall x_D(t) \in \mathbb{X}^D
   \end{equation}
   Since $G_x$ and $G_u$ in \eqref{overall} are the same for $\mathbb{O}_{N_P}^1$ and $\mathbb{O}_{N_P}^2$, $\mathbb{O}_{N_P}^2 \subseteq \mathbb{O}_{N_P}^1 \forall x_D(t) \in \mathbb{X}^D$.
-  If Assumption 2 holds, the set $\mathbb{O}_{N_P}^2$ is non-empty. Hence, a feasible solution $\bar{u}$ exists when \eqref{RMPC} is solved, but it belongs to a smaller set resulting in a conservative solution.\hfill\QED  \\
+  Hence, a feasible solution $\bar{u}$ exists when \eqref{RMPC} is solved, but it belongs to a smaller set resulting in a conservative solution.\hfill\QED  \\
   \iffalse
   This conservativeness arises because on propagating the system \eqref{expanded_xD} with initial condition $x_D(t) \in \mathbb{X}^D$, the corresponding output sequence set is $y_D \in \mathbb{Y}_D^{\Omega}  \supseteq  \mathbb{Y}_D$. 
   \fi
-  In the next section, the presented methods are implemented and compared.
+  In the next section, the presented methods are implemented as numerical simulations and compared.
   \iffalse
  {\color{blue}{Ideas: Say first N data points are collected. An outer bounding polyhedral set $\mathbb{Y}^D_N$ is calculated, that encompasses all the points in $U_N$. Now, every point in $U_N$ lies in this set. As the number of data points increase, we will obtain for sure $\mathbb{Y}^D_{N} \subseteq \mathbb{Y}^D_{N+1}$. Assuming we have infinite data, we have the largest set $\mathbb{Y}^D_{\infty}$ in which every possible $y_D(t)$ will lie. Let $\mathbb{Y}_{\infty}^D$ be a polyhedron $H_Dy_D(t) \leq h_D$. Then, starting at a timestep $t$, if we define $y_D \in \mathbb{Y}_D$ as the sequence $\{y_D(t+k)\in\mathbb{Y}_D,k=1,..,N_P\}$, we can write the set $\mathbb{Y}_D$ as:
  		  \begin{equation*}
@@ -571,7 +571,7 @@ Have to write a theorem that projection is a good idea : The obtained set is lar
     
     \fi
 \section{Numerical simulations}
-Two numerical examples are presented. In the first one, the plant $\mathbb{G}_P$ is a 2-input 2-output linear system with randomly varying parameters. The presented algorithms are implemented and constraint satisfaction is demonstrated.  In the second example, $\mathbb{G}_P$ represents a discrete time 2-input 2-output non-linear plant. The uncertainty sets are extracted according to the methods presented, and are used in a robust open-loop minmax MPC controllers. The improvement in performance on using the disturbance model $D(q^{-1})$, as opposed to considering uncertainty only as an output noise is demonstrated, thus providing an argument to prefer using the uncertainty sets on $w(t)$ over $y_D(t)$. The controllers are implemented using YALMIP \cite{Lofberg2004}, using its robust optimization framework.
+Two numerical examples are presented. In the first one, the plant $\mathbb{G}_P$ is a 2-input 2-output linear system with randomly varying parameters. The presented algorithms are implemented and constraint satisfaction is demonstrated.  In the second example, $\mathbb{G}_P$ represents a discrete time 2-input 2-output non-linear system. The uncertainty sets are extracted according to the methods presented, and are used in a robust open-loop minmax MPC controllers. The improvement in performance on using the disturbance model $D(q^{-1})$, as opposed to considering uncertainty only as an output noise is demonstrated, thus providing an argument to prefer using the uncertainty sets on $w(t)$ over $y_D(t)$ for controller synthesis. The controllers are implemented using YALMIP \cite{Lofberg2004}, utilizing its robust optimization framework.
 \subsection{Linear parameter varying plant}
 Numerical simulations are performed on the following uncertain linear system to evaluate the approaches mentioned:
 \iffalse
@@ -615,6 +615,7 @@ x \\ \dot{x} \\ y \\ \dot{y}
 \end{equation}
 \fi
 \begin{equation}
+\small
 \begin{matrix}
 \mathbb{G}_P : \Bigg\{ & \hspace{-5pt}
 \begin{matrix}
@@ -640,52 +641,26 @@ with the parameters varying randomly every sampling instant between:
 	\vspace{-10pt}  
 \end{table}
 \\
-Experiments are performed to identify a discrete time MIMO-ARX model of the system, by building the dataset $D_N$ with $N=10000$ sampled at $0.1s$. The models $M(q^{-1})$ and $D(q^{-1})$ are computed, as shown in \eqref{tfmodel}, from which non-minimum realization state space models in \eqref{ssmodel} are extracted. A horizon of $N_P=5$ is set in \eqref{RMPC}, and the matrices $G_x$ and $G_u$ in \eqref{overall} are computed, which are required for the calculation of $\mathbb{O}_{N_P}$.
-Then, the dataset $U_N$ of the samples of the signal $y_D(t)$ is constructed. From this dataset, $\mathbb{Y}_D^N$ is extracted, which is the outer bounding polyhedral set of each sample within $U_N$. This is shown in Figure \ref{Y_D^inf}. Instead of a convex hull, a polyhedral approximation of an outer ellipsoidal set is taken. 
+Experiments are performed to identify a discrete time MIMO-ARX model of the system, by building the dataset $D_N$ with $N=10000$ sampled at $0.1s$. For simulation, the system is integrated using the $4^{th}$ order Runge-Kutta method.
+The models $M(q^{-1})$ and $D(q^{-1})$ are computed, as shown in \eqref{tfmodel}, from which non-minimum realization state space models in \eqref{ssmodel} are extracted. A horizon of $N_P=5$ is set in \eqref{RMPC}. The set $\mathbb{Y}_D^{N}$ is shown in Figure \ref{Y_D^inf}. Instead of a convex hull, a polyhedral approximation of an outer ellipsoidal set is taken. 
 	\begin{figure}[h]
 		\hspace{30pt}
-		\includegraphics[scale=0.7]{Y_D_set.eps}
+		\includegraphics[scale=0.6]{Y_D_set.eps}
 		\caption{Set $\mathbb{Y}_D^N$ obtained from $U_N$ with $y_D(t) \in \RR^{2}$}
 		\label{Y_D^inf}
 	\end{figure} 
-	\vspace{-5pt}
-\\ \indent
-It is assumed that $\mathbb{Y}_D^{\infty}=\mathbb{Y}_D^N$, following which the set $\mathbb{Y}_D$ is calculated. It is the set in which the future sequence $\{y_D(t+k),k \in 1,..,N_P\}$ starting from current time instant $t$ and going $N_P=5$ time-steps into the future lies. Using this, the set $\mathbb{O}_{N_P}^D$ is constructed. The state $x_D(t)$ of the non-minimum realization state-space model \eqref{ssD} is updated using a dead-beat observer at each time-step $t$, and the state $x_M(t)$ is updated only using the dynamics of the model. Thus, we have everything necessary to implement Algorithm \ref{alg:mpc_wLP}.
+It is assumed that $\mathbb{Y}_D^{\infty}=\mathbb{Y}_D^N$, following which the set $\mathbb{Y}_D$ is calculated, followed by the construction of $\mathbb{O}_{N_P}^D$. The state $x_D(t)$ of the non-minimum realization state-space model \eqref{ssD} is updated using a dead-beat observer at each time-step $t$, and the state $x_M(t)$ is updated only using the dynamics of the model.
 \\
 \indent
-In-order to implement Algorithm \ref{alg:mpc_proj}, we first need the set $\mathbb{X}^D$ in which the state $x_D(t)$ lies at any time-instant $t$. Since the model \eqref{ssD} is a non-minimum realization, construction of $\mathbb{X}^D$ from $\mathbb{Y}_D^{\infty}$ becomes trivial. After calculating $\mathbb{X}^D$, the set $\mathbb{W}_{\Omega}$ is calculated by projecting $\mathbb{O}_{N_P}^D$ onto the $w$ coordinates. This set-projection operation was performed using the $projection$ function within the multi-parameteric toolbox \cite{mpt}. Following this, we have everything necessary to implement Algorithm \ref{alg:mpc_proj}.
-\iffalse
-\\
-\indent
-Alternative to the algorithms presented, one can just use the set $\mathbb{Y}_D$ as output additive disturbance, that is not acting through the model $D(q^{-1})$ but directly on the output $y(t)$, and design a robust controller with respect to that set.  For this, the output $y_M(t)$ is desired to track the reference $r(t)$, and is constrained to lie within a reduced set $\tilde{\mathbb{Y}}=\mathbb{Y} \sim \mathbb{Y}_D$. The optimization problem equivalent to \eqref{RMPC} solved by the controller at each time-step $t$ in this case is:
-\begin{equation}
-\small
-\begin{aligned}
-\underset{\bar{u}}{\text{min}}
-&  \hspace{20pt} \mathlarger{\sum\limits_{k=1}^{N_P}}(\hat y_M(t+k)-r(t+k))^2 \\
-\text{subject to}
-%\begin{matrix}
-& \hspace{20pt} \hat{x}_M(t+k+1) = A_M\hat{x}_M(t+k) + B_M\bar{u}\\
-& \hspace{20pt} \hat y_M(t+k) = C_M\hat{x}_M(t+k) + D_M\bar{u} \\
-& \hspace{20pt} \hat{x}_M(t)=x_M(t) \\
-& \hspace{20pt} \{\hat{y}_M(t+k),k=1,..,N_P\} \in \tilde{\mathbb{Y}}
-%	& \hspace{20pt} Hy_{\gamma}(t) \leq h \mbox{\AB{I think $Hy_{\gamma}(t)\leq h$ is redundant}}\\
-%	& \hspace{20pt}  g(t+k) \in \mathbb{G}_{N_P}(\gamma(t)) \\
-%\end{matrix}
-\end{aligned}
-\label{RMPC_output}
-\end{equation}
-If the state-space model of $M(q^{-1})$ is a non-minimum realization,
-the state $x_M(t)$ is updated using a deadbeat observer, which places the past plant outputs $y(t)$ in a column vector.
-\fi
+In order to implement Algorithm \ref{alg:mpc_proj}, first the set $\mathbb{X}^D$ is constructed from $\mathbb{Y}_D^{\infty}$, following which the set $\mathbb{W}_{\Omega}$ is calculated by projecting $\mathbb{O}_{N_P}^D$ onto the $w$ coordinates. This set-projection operation was performed using the $projection$ function within the multi-parameteric toolbox \cite{mpt}. 
 	\begin{figure}[h]
 		\vspace{-3pt}
-		\hspace{5pt}
-		\includegraphics[scale=0.8]{output_performance.eps}
+		\hspace{20pt}
+		\includegraphics[scale=0.6]{output_performance.eps}
 		\caption{Comparison of plant output trajectories. Gray area is the output constraint set $\mathbb{Y}$.}
 		\label{fig:y_trajectories}
 	\end{figure} 
-
+	\vspace{-8pt} 
 The output trajectories upon implementation of both the algorithms are compared in Figure \ref{fig:y_trajectories}. It can be seen that in both the cases, the trajectories remain within the constraint set $\mathbb{Y}$. As stated in Proposition 1, it can be seen that the output trajectory resulting from Algorithm \ref{alg:mpc_proj} is conservative with respect to the constraint set as compared to Algorithm \ref{alg:mpc_wLP}. 
 \subsection{Non-linear plant}
 A MIMO discrete time non-linear plant $\mathbb{G}_P$ described by the following non-linear equations is considered:
@@ -719,9 +694,8 @@ Similar to the first example, datasets $D_N$ and $U_N$ are constructed, and corr
 \end{matrix}
 \label{RMPC_W_minmax}
 \end{equation}
-At each time step $t$, the state $x(t)$ is read, and either $\mathbb{W}=\mathbb{W}(x_D(t))$ or $\mathbb{W}=\mathbb{W}_{\Omega}$ is set. In the first case, before solving \eqref{RMPC_W_minmax}, some simple matrix-vector operations are to performed to calculate $\mathbb{W}(x_D(t))$ at each step. \\
-To demonstrate the use of an appended disturbance model to improve the performance of robust MPC, the minmax MPC controller in \eqref{RMPC_YD_minmax} is implemented. For this controller, the uncertainty is modeled as simple output disturbance $y_D(t)$ constrained to lie within the set $\mathbb{Y}_D$. The matrix $D_Y=eye(ny)$, indicating that each output channel has a disturbance signal added to it.
-\\
+At each time step $t$, the state $x(t)$ is read, and either $\mathbb{W}=\mathbb{W}(x_D(t))$ or $\mathbb{W}=\mathbb{W}_{\Omega}$ is set. In the first case, before solving \eqref{RMPC_W_minmax}, the matrix-vector operations in \eqref{w_xd_set} are performed to calculate $\mathbb{W}(x_D(t))$. \\
+The performance of the controllers implementing \eqref{RMPC_W_minmax} is compared with that implementing \eqref{RMPC_YD_minmax}, in which the uncertainty is modeled as simple output disturbance $y_D(t)$ constrained to lie within the set $\mathbb{Y}_D$. The matrix $D_Y=eye(ny)$, indicating that each output channel has a disturbance signal added to it.  This comparison is made to demonstrate the improvement in performance on using a disturbance model along with the nominal plant model for robust MPC. 
 \begin{equation}
 \small
 \begin{matrix}
@@ -744,21 +718,21 @@ To demonstrate the use of an appended disturbance model to improve the performan
 \end{matrix}
 \label{RMPC_YD_minmax}
 \end{equation}
-Since the matrices $A_M,B_M,C_M,D_M$ represent a non-minimal state space model of the $M(q^{-1})$, the state $x_M(t)$ of the model is updated using a deadbeat observer. This observer places the past plant outputs $\{y(k),k<t\}$ and inputs $\{u(k),k<t\}$ in a vector composing the system state. \\
+Since the matrices $A_M,B_M,C_M,D_M$ represent a non-minimal state space model of the $M(q^{-1})$, the state $x_M(t)$ of the model is updated using a deadbeat observer. This observer places the past plant outputs $\{y(k),k<t\}$ and inputs $\{u(k),k<t\}$ in a vector composing the system state.\\
  The output constraint set $\mathbb{Y}$ is composed of:
  \begin{equation}
  \small
  \mathbb{Y}=\begin{Bmatrix}y(t+k):\begin{bmatrix} 1 & 0 \\ 0 & 1 \\ -1 & 0 \\ 0 & -1 \end{bmatrix} y(t+k) \leq \begin{bmatrix} 0.5 \\ 0.5 \\ 0.5 \\ 0.5 \end{bmatrix}, k=1,..,N_P\end{Bmatrix}
  \end{equation}
-and the output $y(t)$ of the plant should track the constant reference $r(t)=\begin{bmatrix} 0.5 & -0.5 \end{bmatrix} '$. A comparison of the performance of the different uncertainty descriptions in shown in Figure \ref{minmaxMPC}. It is clearly seen that using $\mathbb{W}(x_D(t))$ results in the least conservative performance, indicating that using a disturbance model improves robust MPC performance.
+and the output $y(t)$ of the plant should track the constant reference $r(t)=\begin{bmatrix} 0.5 & -0.5 \end{bmatrix} '$. A comparison of the performance of the different uncertainty descriptions in shown in Figure \ref{minmaxMPC}. It is clearly seen that using $\mathbb{W}(x_D(t))$ results in the least conservative performance, indicating that using a disturbance model improves robust MPC performance, and hence the calculation of uncertainty sets on $w(t)$ is justified.
 \begin{figure}[h]
 	\centering
-\includegraphics[scale=0.85]{mimax_full.eps}
-\caption{Performance comparison on using the three different uncertainty descriptions in minmax-MPC}
+\includegraphics[scale=0.6]{mimax_full.eps}
+\caption{Performance comparison on using the three different uncertainty descriptions in minmax MPC}
 \label{minmaxMPC}
 \end{figure}
 \section{Conclusion}
 This paper presents a method to characterize the sets in which model uncertainty described as exogenous disturbances lies, along with a simple robust MPC scheme in which this uncertainty description can be used. The characterization of uncertainty sets builds on ARX identification of the plant, and is based on the premise that the prediction error of the identification process is directly related to model uncertainties. The robust MPC schemes are numerically validated, and were found to provide robust constraint satisfaction. 
-A number of questions are to be researched on from this point. The first is the requirements to be satisfied for Assumption 1 to hold. Following this, analysis of the robust MPC schemes has to be performed. Some investigation into methods that could reduce conservatism of Algorithm \ref{alg:mpc_proj} is also to be done. Also, extensions are to be done to the methodology in cases when plant models other than ARX models are used.
+A number of questions are to be researched on from this point. The first is the requirements to be satisfied for Assumption \ref{assmp_inf} to hold. Following this, analysis of the robust MPC schemes has to be performed. Some investigation into methods that could reduce conservatism of Algorithm \ref{alg:mpc_proj} is also to be done. Also, extensions are to be done to the methodology in cases when plant models other than ARX models are used, and the noisy output case should be tackled.
 \bibliography{references}. 
 \end{document}
