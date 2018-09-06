@@ -237,7 +237,7 @@ If the dataset $D_N$ is noise-free, the part $y_D(t)$ of the output $y(t)$ that 
   \end{equation}
   where $y \in \mathbb{Y}$ denotes the future output sequence $\{y(t+k),k=1,..,N_P\}\in\mathbb{Y}$
   and $w \in \mathbb{W}$ denotes the future disturbance sequence $\{w(t+k),k=0,..,N_P\}\in\mathbb{W}$.
-  $\mathbb{O}_{N_P}$ is the set of initial states $x(t)$ and a constant control input $\bar{u}$ such that the future output trajectory of the system does not violate the constraints defined by $\mathbb{Y}$ for any possible bounded disturbance sequence $w\in\mathbb{W}$, within the horizon time $N_P$. It can also be seen as an $N_P$-step reachable set from a single point initial state set $\{x(t)\}$ and a constant control input $\bar{u}$, subject to bounded disturbances in $\mathbb{W}$. More details are discussed in \cite{Predictivecontrol}. It is noted that the presented scheme is similar to open-loop min-max robust MPC, except that in the prediction model, disturbances are ignored, and are considered only while calculating input bounds.
+  $\mathbb{O}_{N_P}$ is the set of initial states $x(t)$ and a constant control input $\bar{u}$ such that the future output trajectory of the system does not violate the constraints defined by $\mathbb{Y}$ for any possible bounded disturbance sequence $w\in\mathbb{W}$, within the horizon time $N_P$. It can also be seen as an $N_P$-step reachable set from a single point initial state set $\{x(t)\}$ and a constant control input $\bar{u}$, subject to bounded disturbances in $\mathbb{W}$. More details are discussed in \cite{Predictivecontrol}. It is noted that the presented scheme is similar to the robust predictive control scheme in \cite{CHISCI20011019}. The main difference is that in our case, there is no requirement for the controller to reduce to a predetermined linear state-feedback form when the output constraints are satisfied.
   \\
   At any future time instant $t+k$, given the initial state $x(t)$ and a constant control input $\bar{u}$, the output $y(t+k)$ is given by:
   	\begin{equation}
@@ -634,7 +634,7 @@ with the parameters varying randomly every sampling instant between:
 		$A_u$ & $\begin{bmatrix} -3 & 3 \\ 6 & -9 \end{bmatrix}$ - 
 		$\begin{bmatrix} -2.9 & 3.1 \\ 6.1 & -8.9 \end{bmatrix}$  \vspace{1pt}\\
 		$B_u$ & $\begin{bmatrix} 2 & 2 \\ 1.8 & 2.2 \end{bmatrix}$ - 
-		$\begin{bmatrix} 2.01 & 2.01 \\ 1.81 & 2.21 \end{bmatrix}$  \\
+		$\begin{bmatrix} 2.05 & 2.05 \\ 1.85 & 2.25 \end{bmatrix}$  \\
 		\hline
 	\end{tabular}
 	\label{Simparam}
@@ -661,7 +661,7 @@ In order to implement Algorithm \ref{alg:mpc_proj}, first the set $\mathbb{X}^D$
 		\label{fig:y_trajectories}
 	\end{figure} 
 	\vspace{-8pt} 
-The output trajectories upon implementation of both the algorithms are compared in Figure \ref{fig:y_trajectories}. It can be seen that in both the cases, the trajectories remain within the constraint set $\mathbb{Y}$. As stated in Proposition 1, it can be seen that the output trajectory resulting from Algorithm \ref{alg:mpc_proj} is conservative with respect to the constraint set as compared to Algorithm \ref{alg:mpc_wLP}. 
+The output trajectories upon implementation of both the algorithms are compared in Figure \ref{fig:y_trajectories}, for different realizations of plant uncertainty. It can be seen that in both the cases, the trajectories remain within the constraint set $\mathbb{Y}$. As stated in Proposition 1, it can be seen that the output trajectory resulting from Algorithm \ref{alg:mpc_proj} is conservative with respect to the constraint set as compared to Algorithm \ref{alg:mpc_wLP}. 
 \subsection{Non-linear plant}
 A MIMO discrete time non-linear plant $\mathbb{G}_P$ described by the following non-linear equations is considered:
 \begin{equation}

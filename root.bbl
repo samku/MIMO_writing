@@ -47,6 +47,11 @@ F.~Borrelli, A.~Bemporad, and M.~Morari, {\em Predictive control for linear and
   hybrid systems}.
 \newblock Cambridge University Press, 2017.
 
+\bibitem{CHISCI20011019}
+L.~Chisci, J.~Rossiter, and G.~Zappa, ``Systems with persistent disturbances:
+  predictive control with restricted constraints,'' {\em Automatica}, vol.~37,
+  no.~7, pp.~1019 -- 1028, 2001.
+
 \bibitem{Lofberg2004}
 J.~L{\"{o}}fberg, ``Yalmip : A toolbox for modeling and optimization in
   matlab,'' in {\em In Proceedings of the CACSD Conference}, (Taipei, Taiwan),
