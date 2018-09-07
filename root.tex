@@ -74,7 +74,7 @@ Characterization of exogenous disturbance uncertainty sets and their application
 }
 
 
-\author{ Sampath Kumar Mulagaleti, Alberto Bemporad and Mario Zanon % <-this % stops a space
+\author{ Sampath Kumar Mulagaleti, Alberto Bemporad, and Mario Zanon % <-this % stops a space
 \thanks{*This work was not supported by any organization}% <-this % stops a space
 \thanks{Sampath Kumar Mulagaleti, Alberto Bemporad and Mario Zanon are with
 		the IMT School for Advanced Studies Lucca, Piazza San Francesco 19,
@@ -390,8 +390,8 @@ Hence, to calculate the set $\mathbb{O}_{N_P}$, we need the disturbance sequence
  	 In the limit of infinite data used to build $U_N$, the outer encompassing sets $\mathbb{Y}_D^{N}$ converge to a steady set $\mathbb{Y}_D^{\infty}$.
  	 \label{assmp_inf}
  \end{assumption} 
-  This is a reasonable assumption if the underlying plant and the identified model are both stable, since they would lead to bounded sample data $y(k)$ and $M(q^{-1})u(k)$ respectively, and the subtraction of bounded data results in bounded data. Following Assumption \ref{assmp_arx}, the infinite data would be informative, resulting in the identification being performed for all possible excitations of the plant. Hence, the dataset $U_N$ will consist of bounded data containing all possible disturbance samples, leading to the convergence of the outer bounding sets $\mathbb{Y}_D^N$. Thus, $\mathbb{Y}_D^{\infty}$ is the largest set within which every possible exogenous disturbance $y_D(t)$ lies. That is, $y_D(t) \in \mathbb{Y}_D^{\infty} \hspace{2pt}  \forall \ZZ^{+}$.
-
+  Assumption \ref{assmp_inf} is reasonable if the underlying plant and the identified model are both stable, since they would lead to bounded sample data $y(k)$ and $M(q^{-1})u(k)$ respectively, and the subtraction of bounded data results in bounded data. Following Assumption \ref{assmp_arx}, the infinite data would be informative, resulting in the identification being performed for all possible excitations of the plant.  Hence, the dataset $U_{\infty}$, based on which $\mathbb{Y}_D^{\infty}$ is constructed will consist of bounded data containing all possible disturbance samples. Thus, it is the largest set within which every possible exogenous disturbance $y_D(t)$ lies. That is, $y_D(t) \in \mathbb{Y}_D^{\infty} \hspace{2pt}  \forall t \in \ZZ^{+}$. \\
+\noindent
 In a polyhedral form, this set defining the point wise in time values of $y_D(t)$ is written as $\mathbb{Y}_D^{\infty} = \{y_D(t):H_Dy_D(t) \leq h_D \forall t \in \ZZ^+\}$. \\
  Since $y_D(t)$ lies within $\mathbb{Y}_D^{\infty}$ at each time instant $t$, we can define a sequence $y_D \in \mathbb{Y}_D$ starting from time instant $t$ and going $N_P$ time steps into the future $\{y_D(t+k),k=1,..,N_P\}\in\mathbb{Y}_D$ as:
  \begin{equation}
@@ -475,7 +475,7 @@ Similar to before, we construct a set $\mathbb{O}^D_{N_P}$ defined as:
 \indent
   It should be noted that according to Algorithm \ref{alg:mpc_wLP}, at each time step $t$, $n_cN_P$ linear programs in \eqref{overall} should be solved for the worst case disturbance sequences of $w$, before solving the quadratic program \eqref{RMPC}. To reduce this online computation, it is desirable to calculate the sets $\mathbb{W}$ and $\mathbb{O}_{N_P}$ offline. 
   \\ \indent
-  To calculate these sets offline, we first define the set $\mathbb{X}^D = \{x_D: G^D_xx_D \leq g^D_x\}$. This is the set of all the initial states that the disturbance block with state-space model \eqref{ssD} can have. If the state-space model \eqref{ssD} is a non-minimal realization of the I/O model $y_D(t) = D(q^{-1})w(t)$, the state vector $x_D(t)$ at any time instant $t$ is a collection of the previous outputs $y_D(t)$. This is because the model $D(q^{-1})= 1/A(q^{-1})$ means that there is no dependence of current output $y_D(t)$ on past input sequence $\{w(k),k < t\}$. Following Assumption \ref{assmp_inf}, if we can build the set $\mathbb{Y}_D^{\infty}$ in which the output $y_D(t)$ can lie at any instant of time $t$, construction of the corresponding set $\mathbb{X}^D$ becomes trivial. If the number of past outputs present in the state is the same for all output channels, $\mathbb{X}^D$ is constructed as an enumeration of $\mathbb{Y}_D^{\infty}$. Else, a feasibility problem is solved for the missing parts of the past outputs. Upon construction of $\mathbb{X}^D$, we can define the disturbance sequence set $\mathbb{W}_{\Omega}$ as:
+  To calculate these sets offline, we first define the set $\mathbb{X}^D = \{x_D: G^D_xx_D \leq g^D_x\}$. This is the set of all the initial states that the disturbance block with state-space model \eqref{ssD} can have. If the state-space model \eqref{ssD} is a non-minimal realization of the I/O model $y_D(t) = D(q^{-1})w(t)$, the state vector $x_D(t)$ at any time instant $t$ is a collection of the previous outputs $y_D(t)$. This is because the model $D(q^{-1})= 1/A(q^{-1})$ means that there is no dependence of current output $y_D(t)$ on past input sequence $\{w(k),k < t\}$. Following Assumption \ref{assmp_inf}, if we can build the set $\mathbb{Y}_D^{\infty}$ in which the output $y_D(t)$ can lie at any instant of time $t$, construction of the corresponding set $\mathbb{X}^D$ is done as discussed in Appendix A. Upon construction of $\mathbb{X}^D$, we can define the disturbance sequence set $\mathbb{W}_{\Omega}$ as:
   \\
   \begin{equation}
   \begin{matrix}
@@ -649,7 +649,7 @@ The models $M(q^{-1})$ and $D(q^{-1})$ are computed, as shown in \eqref{tfmodel}
 		\caption{Set $\mathbb{Y}_D^N$ obtained from $U_N$ with $y_D(t) \in \RR^{2}$}
 		\label{Y_D^inf}
 	\end{figure} 
-It is assumed that $\mathbb{Y}_D^{\infty}=\mathbb{Y}_D^N$, following which the set $\mathbb{Y}_D$ is calculated, followed by the construction of $\mathbb{O}_{N_P}^D$. The state $x_D(t)$ of the non-minimum realization state-space model \eqref{ssD} is updated using a dead-beat observer at each time-step $t$, and the state $x_M(t)$ is updated only using the dynamics of the model.
+It is assumed that $\mathbb{Y}_D^{\infty}=\mathbb{Y}_D^N$, following which the set $\mathbb{Y}_D$ is calculated, followed by the construction of $\mathbb{O}_{N_P}^D$. The state $x_D(t)$ of the non-minimum realization state-space model \eqref{ssD} is updated using past outputs at each time-step $t$, and the state $x_M(t)$ is updated only using the dynamics of the model.
 \\
 \indent
 In order to implement Algorithm \ref{alg:mpc_proj}, first the set $\mathbb{X}^D$ is constructed from $\mathbb{Y}_D^{\infty}$, following which the set $\mathbb{W}_{\Omega}$ is calculated by projecting $\mathbb{O}_{N_P}^D$ onto the $w$ coordinates. This set-projection operation was performed using the $projection$ function within the multi-parameteric toolbox \cite{mpt}. 
@@ -718,7 +718,7 @@ The performance of the controllers implementing \eqref{RMPC_W_minmax} is compare
 \end{matrix}
 \label{RMPC_YD_minmax}
 \end{equation}
-Since the matrices $A_M,B_M,C_M,D_M$ represent a non-minimal state space model of the $M(q^{-1})$, the state $x_M(t)$ of the model is updated using a deadbeat observer. This observer places the past plant outputs $\{y(k),k<t\}$ and inputs $\{u(k),k<t\}$ in a vector composing the system state.\\
+Since the matrices $A_M,B_M,C_M,D_M$ represent a non-minimal state space model of the $M(q^{-1})$, the state $x_M(t)$ of the model is updated by placing past plant outputs $\{y(k),k<t\}$ and inputs $\{u(k),k<t\}$ in a vector composing the system state.\\
  The output constraint set $\mathbb{Y}$ is composed of:
  \begin{equation}
  \small
@@ -734,5 +734,38 @@ and the output $y(t)$ of the plant should track the constant reference $r(t)=\be
 \section{Conclusion}
 This paper presents a method to characterize the sets in which model uncertainty described as exogenous disturbances lies, along with a simple robust MPC scheme in which this uncertainty description can be used. The characterization of uncertainty sets builds on ARX identification of the plant, and is based on the premise that the prediction error of the identification process is directly related to model uncertainties. The robust MPC schemes are numerically validated, and were found to provide robust constraint satisfaction. 
 A number of questions are to be researched on from this point. The first is the requirements to be satisfied for Assumption \ref{assmp_inf} to hold. Following this, analysis of the robust MPC schemes has to be performed. Some investigation into methods that could reduce conservatism of Algorithm \ref{alg:mpc_proj} is also to be done. Also, extensions are to be done to the methodology in cases when plant models other than ARX models are used, and the noisy output case should be tackled.
-\bibliography{references}. 
+\section*{Appendix A}
+\vspace{-10pt}
+\noindent
+\textit{Calculation of $\mathbb{X}^D$}: 
+Let each output channel of the MIMO system \eqref{ssD} be indexed by $c$, and denoted as the scalar $y_D^c(t)$. Hence, $y_D(t)=[y_D^1(t) \hspace{4pt} y_D^2(t) \hspace{4pt} .. \hspace{4pt} y_D^{n_y}(t)]'$. Let the state $x_D(t)$ be composed of $h_c$ number of past values of the output $y_D^c(t)$ of channel $c$. 
+To calculate the set $\mathbb{X}^D$ in which $x_D(t)$ lies, we first define $\bar{h}=max(h_c), c=1,..,n_y $. Then, we introduce a new vector $\bar{x}_D(t)$, which is the collection of all outputs channels till $\bar{h}$ time steps into the past. For example, if the number of output channels $n_y=3$, and dependence of state on past outputs is $h_1=3$, $h_2=2$ and $h_3=1$, the state $x_D(t)$ and the vector $\bar{x}_D(t)$ at time instant $t$ can be written as:
+\begin{equation}
+\small
+\begin{matrix}
+x_D(t) = \begin{bmatrix}
+y_D^1(t-1) \\ y_D^2(t-1) \\ y_D^3(t-1) \\ y_D^1(t-2) \\ y_D^2(t-2) \\ y_D^1(t-3)
+\end{bmatrix}
+& 
+\bar{x}_D(t) = \begin{bmatrix}
+y_D^1(t-1) \\ y_D^2(t-1) \\ y_D^3(t-1) \\ y_D^1(t-2) \\ y_D^2(t-2) \\ \textcolor{red}{y_D^3(t-2)} \\ y_D^1(t-3) \\ \textcolor{red}{y_D^2(t-3)} \\ \textcolor{red}{y_D^3(t-3)}
+\end{bmatrix}
+\end{matrix}
+\end{equation}
+The set $\bar{\mathbb{X}}^D$ in which $\bar{x}_D(t)$ lies is defined as:
+\begin{equation}
+\small
+\bar{\mathbb{X}}^D = \begin{Bmatrix}x_D(t): \begin{bmatrix} y_D^1(t-k) \\ y_D^2(t-k) \\ . \\ . \\ y_D^{n_y}(t-k) \end{bmatrix} \in \mathbb{Y}_D^{\infty} \hspace{5pt} \forall k=1,..,\bar{h} \end{Bmatrix}
+\end{equation}
+Using the polyhedral sets for point-wise in time constraint $\mathbb{Y}_D^{\infty}$, the set $\bar{\mathbb{X}}^D$ is written as:
+\begin{equation}
+\small
+\bar{\mathbb{X}}^D = \begin{Bmatrix}x_D(t):\begin{bmatrix} H_D & . & . & 0 \\ . & H_D & . & . \\ . & . & . & . \\ 0 & . & . & H_D \end{bmatrix} \begin{bmatrix} y_D(t-1) \\ . \\ . \\ y_D(t-\bar{h}) \end{bmatrix} \leq \begin{bmatrix} h_D \\ . \\. \\ h_D \end{bmatrix}\end{Bmatrix}
+\end{equation}
+Since the state vector $x_D(t)$ is composed of a subset of dimensions of $\bar{x}_D(t)$, the set $\mathbb{X}^D$ in which $x_D(t)$ lies is hence a projection of $\bar{\mathbb{X}^D}$ onto those dimensions, given by:
+\begin{equation}
+\mathbb{X}^D = \text{proj}_{x_D(t)}(\bar{\mathbb{X}}^D)
+\end{equation}
+Further discussion on performing this projection operation is discussed in \cite{Predictivecontrol}.
+\bibliography{references}
 \end{document}

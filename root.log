@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.1.25)  6 SEP 2018 16:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.1.25)  7 SEP 2018 12:39
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1090,11 +1090,11 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 LaTeX Font Warning: Command \small invalid in math mode on input line 668.
 
-[5 <./Drawings/Draw/Y_D_set-eps-converted-to.pdf> <./Drawings/Draw/output_perfo
-rmance-eps-converted-to.pdf>]
 
 LaTeX Font Warning: Command \small invalid in math mode on input line 676.
 
+[5 <./Drawings/Draw/Y_D_set-eps-converted-to.pdf> <./Drawings/Draw/output_perfo
+rmance-eps-converted-to.pdf>]
 
 LaTeX Font Warning: Command \small invalid in math mode on input line 700.
 
@@ -1124,10 +1124,19 @@ n input line 730.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-(./root.bbl
+
+LaTeX Font Warning: Command \small invalid in math mode on input line 744.
+
+
+LaTeX Font Warning: Command \small invalid in math mode on input line 757.
+
+
+LaTeX Font Warning: Command \small invalid in math mode on input line 762.
+
+[6 <./Drawings/Draw/mimax_full-eps-converted-to.pdf>] (./root.bbl
 Missing character: There is no Ä in font ptmr7t!
 Missing character: There is no ‡ in font ptmr7t!
- [6 <./Drawings/Draw/mimax_full-eps-converted-to.pdf>])
+)
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -1153,7 +1162,7 @@ Here is how much of TeX's memory you used:
  28743 multiletter control sequences out of 15000+600000
  104840 words of font info for 233 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,22n,84p,1179b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 55i,22n,84p,1157b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist
@@ -1167,7 +1176,7 @@ exlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-di
 st/fonts/type1/urw/times/utmbi8a.pfb></usr/share/texlive/texmf-dist/fonts/type1
 /urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr
 i8a.pfb>
-Output written on root.pdf (7 pages, 225641 bytes).
+Output written on root.pdf (7 pages, 228563 bytes).
 PDF statistics:
  125 PDF objects out of 1000 (max. 8388607)
  88 compressed objects within 1 object stream
